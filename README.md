@@ -1,0 +1,2 @@
+# QRayTracer
+raytracer in qt
