@@ -167,7 +167,7 @@ Matrix* Matrix::transpose() {
     return transposed;
 }
 
-float Matrix::determinant() { // 2x2 matrice
+float Matrix::determinant() {
     if (2 == this->nColumns && 2 == this->nRows)
         return this->matrice[0][0] * this->matrice[1][1] - this->matrice[0][1] * this->matrice[1][0];
 
@@ -214,6 +214,73 @@ Matrix* Matrix::inverse() {
     return matrix;
 }
 
+Matrix* Matrix::translation(Vector *vec) { static
+    Matrix *matrix = new Matrix(4, 4);
+    matrix->matrice = {
+        {1.0, 0.0, 0.0, vec->fx},
+        {0.0, 1.0, 0.0, vec->fy},
+        {0.0, 0.0, 1.0, vec->fz},
+        {0.0, 0.0, 0.0, 1.0}
+    };
+    return matrix;
+}
+
+Matrix* Matrix::scaling(Vector *vec) { static
+    Matrix *matrix = new Matrix(4, 4);
+    matrix->matrice = {
+        {vec->fx, 0.0, 0.0, 0.0},
+        {0.0, vec->fy, 0.0, 0.0},
+        {0.0, 0.0, vec->fz, 0.0},
+        {0.0, 0.0, 0.0, 1.0}
+    };
+    return matrix;
+}
+
+Matrix* Matrix::rotate_x(float r) { static
+    Matrix *matrix = new Matrix(4, 4);
+    matrix->matrice = {
+        {1.0, 0.0, 0.0, 0.0},
+        {0.0, qCos(r), -qSin(r), 0.0},
+        {0.0, qSin(r), qCos(r), 0.0},
+        {0.0, 0.0, 0.0, 1.0}
+    };
+    return matrix;
+}
+
+Matrix* Matrix::rotate_y(float r) { static
+    Matrix *matrix = new Matrix(4, 4);
+    matrix->matrice = {
+        {qCos(r), 0.0, qSin(r), 0.0},
+        {0.0, 1.0, 0.0, 0.0},
+        {-qSin(r), 0.0, qCos(r), 0.0},
+        {0.0, 0.0, 0.0, 1.0}
+    };
+    return matrix;
+}
+
+
+Matrix* Matrix::rotate_z(float r) { static
+    Matrix *matrix = new Matrix(4, 4);
+    matrix->matrice = {
+        {qCos(r), -qSin(r), 0.0, 0.0},
+        {qSin(r), qCos(r), 0.0, 0.0},
+        {0.0, 0.0, 1.0, 0.0},
+        {0.0, 0.0, 0.0, 1.0}
+    };
+    return matrix;
+}
+
+Matrix* Matrix::shearing(float fxy, float fxz, float fyx, float fyz, float fzx, float fzy) { static
+    Matrix *matrix = new Matrix(4, 4);
+    matrix->matrice = {
+        {1.0, fxy, fxz, 0.0},
+        {fyx, 1.0, fyz, 0.0},
+        {fzx, fzy, 1.0, 0.0},
+        {0.0, 0.0, 0.0, 1.0}
+    };
+    return matrix;
+}
+
 QString Matrix::stringify() {
     QString sMatrix = "";
     for (int i=0; i<nRows; i++) {
@@ -226,3 +293,11 @@ QString Matrix::stringify() {
     }
     return sMatrix;
 }
+
+
+
+
+
+
+
+

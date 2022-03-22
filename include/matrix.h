@@ -28,6 +28,12 @@ public:
     float minor(int nRow, int nCol);
     float cofactor(int nRow, int nCol);
     Matrix *inverse();
+    static Matrix *translation(Vector *vec);
+    static Matrix *scaling(Vector *vec);
+    static Matrix *rotate_x(float r);
+    static Matrix *rotate_y(float r);
+    static Matrix *rotate_z(float r);
+    static Matrix *shearing(float fxy, float fxz, float fyx, float fyz, float fzx, float fzy);
     QString stringify();
 
     int nRows, nColumns;
