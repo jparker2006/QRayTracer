@@ -21,7 +21,9 @@ public:
     Vector *normalize();
     float dot_product(Vector *vec);
     Vector *cross_product(Vector *vec);
+    Vector *identity_multiply();
     QString stringify();
+
 };
 
 #endif // VECTOR_H

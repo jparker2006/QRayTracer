@@ -3,6 +3,7 @@
 // color x = r, y = g, z = b
 
 #include "include/vector.h"
+#include "include/matrix.h"
 
 Vector::Vector(float fx, float fy, float fz, float fw) {
     this->fx = fx;
@@ -67,6 +68,15 @@ Vector* Vector::cross_product(Vector *vec) {
         this->fx * vec->fy - this->fy * vec->fx,
         0.0
     );
+}
+
+Vector* Vector::identity_multiply() {
+    Matrix *identity_matrix = new Matrix(4, 4);
+    identity_matrix->matrice[0][0] = 1;
+    identity_matrix->matrice[1][1] = 1;
+    identity_matrix->matrice[2][2] = 1;
+    identity_matrix->matrice[3][3] = 1;
+    return identity_matrix->vector_multiply(this);
 }
 
 QString Vector::stringify() {
