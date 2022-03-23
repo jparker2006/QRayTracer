@@ -25,9 +25,16 @@ void Canvas::write_ppm() {
     sFile += "P3\n" + QString::number(this->nWidth) + " " + QString::number(this->nHeight) + "\n255\n"; // heading
     for (int i=0; i<this->nHeight; i++) {
         for (int j=0; j<this->nWidth; j++) {
-            sFile += QString::number(qRound(this->aPixels[j][i]->fx * 255.0)) + " ";
-            sFile += QString::number(qRound(this->aPixels[j][i]->fy * 255.0)) + " ";
-            sFile += QString::number(qRound(this->aPixels[j][i]->fz * 255.0)) + " ";
+            // this should be more elegant
+            float r = this->aPixels[j][i]->fx;
+            float g = this->aPixels[j][i]->fy;
+            float b = this->aPixels[j][i]->fz;
+            r  = r > 1 ? 1 : r;
+            g  = g > 1 ? 1 : g;
+            b  = b > 1 ? 1 : b;
+            sFile += QString::number(qRound(r * 255.0)) + " ";
+            sFile += QString::number(qRound(g * 255.0)) + " ";
+            sFile += QString::number(qRound(b * 255.0)) + " ";
         }
         sFile += "\n";
     }

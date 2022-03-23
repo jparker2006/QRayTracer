@@ -139,12 +139,10 @@ Matrix* Matrix::identity_multiply() {
 
 Vector* Matrix::vector_multiply(Vector *vector) {
     Matrix *matrix = Matrix::from_vector(vector);
-    return this->dot_product(matrix)->to_vector(); // mem leak
+    return this->dot_product(matrix)->to_vector();
 }
 
 Vector* Matrix::to_vector() {
-    if (this->nColumns != 1 || this->nRows != 4)
-        return nullptr;
     return new Vector(this->matrice[0][0], this->matrice[1][0], this->matrice[2][0], this->matrice[3][0]);
 }
 
@@ -293,11 +291,3 @@ QString Matrix::stringify() {
     }
     return sMatrix;
 }
-
-
-
-
-
-
-
-

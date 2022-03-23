@@ -7,12 +7,15 @@
 #include "include/ray.h"
 #include "include/intersection.h"
 #include "include/matrix.h"
+#include "include/material.h"
 
 class Sphere {
 public:
-    Sphere();
-    QVector<Intersection *> intersection(Ray *ray, bool bTransform);
+    Sphere(Material *material);
+    QVector<Intersection *> intersection(Ray *ray);
+    Vector *normal(Vector *point);
     Matrix *transformation = new Matrix(4, 4);
+    Material *material;
 };
 
 #endif // SPHERE_H

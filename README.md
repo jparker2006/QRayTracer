@@ -1,2 +1,3 @@
 # QRayTracer
-raytracer in qt
+raytracer in qt<br>
+qmake<br>make<br>./QtRayTracer

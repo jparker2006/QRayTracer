@@ -1,4 +1,4 @@
-// vector has a w = 0.0
+﻿// vector has a w = 0.0
 // point has a w = 1.0
 // color x = r, y = g, z = b
 
@@ -77,6 +77,12 @@ Vector* Vector::identity_multiply() {
     identity_matrix->matrice[2][2] = 1;
     identity_matrix->matrice[3][3] = 1;
     return identity_matrix->vector_multiply(this);
+}
+
+Vector* Vector::reflect(Vector *normal) {
+    float in_dot_normal = this->dot_product(normal);
+    normal = normal->scalar_multiply(2 * in_dot_normal);
+    return this->ew_subtract(normal);
 }
 
 QString Vector::stringify() {
