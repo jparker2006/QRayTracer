@@ -8,9 +8,10 @@
 
 class Intersection {
 public:
-    Intersection(float ft); // store object
-    static Intersection *hit(QVector<Intersection *> intersections);
+    Intersection(float ft, int index); // store object
+    static Intersection* hit(QVector<Intersection *> intersections);
     float ft;
+    int index; // objects index
 };
 
 #endif // INTERSECTION_H

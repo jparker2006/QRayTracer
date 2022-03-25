@@ -36,11 +36,50 @@ void render(Camera *camera, World *world) {
 
 int main(int argc, char *argv[]) {
     QCoreApplication application(argc, argv);
-    Camera *cam = new Camera(300, 300, M_PI / 3.0, Matrix::identity_matrix());
+
+    Camera *cam = new Camera(240, 120, M_PI / 3.0, Matrix::identity_matrix());
+    Vector *from = new Vector(0, 1.5, -5, 1);
+    Vector *to = new Vector(0, 1, 0, 1);
+    Vector *up = new Vector(0, 1, 0, 0);
+    cam->transformation = Matrix::view_transformation(from, to, up);
+
     World *world = new World();
     world->light = new Light(white, new Vector(-10, 10, -10, 1));
-    Material *mat = new Material(new Vector(0.8, 1.0, 0.6, 0), 0.1, 0.7, 0.2, 200);
-    world->objects.push_back(new Sphere(mat));
+    Material *border_material = new Material(new Vector(1, 0.9, 0.9, 0), 0.1, 0.9, 0.0, 200);
+    Material *middle_material = new Material(new Vector(0.1, 1.0, 0.5, 0.0), 0.25, 0.9, 0.3, 200);
+    Material *right_material = new Material(new Vector(0.0 / 255, 0.0 / 255, 128.0 / 255, 0.0), 0.25, 0.9, 0.3, 200);
+    Material *left_material = new Material(new Vector(255.0 / 255, 99.0 / 255, 71.0 / 255, 0.0), 0.25, 0.9, 0.3, 200);
+
+    Sphere *middle = new Sphere(middle_material, 0);
+    middle->transformation = Matrix::translation(new Vector(-0.5, 1.0, 0.5, 0.0));
+    middle->transformation = middle->transformation->dot_product(Matrix::scaling(new Vector(1.0, 1.0, 1.0, 0))); // weird that i have to do this
+
+    Sphere *right = new Sphere(right_material, 1);
+    right->transformation = Matrix::translation(new Vector(1.5, 0.5, -0.5, 0.0));
+    right->transformation = right->transformation->dot_product(Matrix::scaling(new Vector(1.0, 1.0, 1.0, 0))); // weird that i have to do this
+    right->transformation = right->transformation->dot_product(Matrix::scaling(new Vector(0.5, 0.5, 0.5, 0.0)));
+
+    Sphere *left = new Sphere(left_material, 2);
+    left->transformation = Matrix::translation(new Vector(-1.5, 0.33, -0.75, 0.0));
+    left->transformation = left->transformation->dot_product(Matrix::scaling(new Vector(1.0, 1.0, 1.0, 0))); // weird that i have to do this
+    left->transformation = left->transformation->dot_product(Matrix::scaling(new Vector(0.33, 0.33, 0.33, 0.0)));
+
+    Sphere *floor = new Sphere(border_material, 3);
+    floor->transformation = Matrix::scaling(new Vector(10.0, 0.01, 10.0, 0));
+
+    world->objects.push_back(middle);
+    world->objects.push_back(right);
+    world->objects.push_back(left);
+    world->objects.push_back(floor);
+
     render(cam, world);
+
     return 0;
 }
+
+
+
+
+
+
+

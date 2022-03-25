@@ -1,4 +1,5 @@
 #include "include/canvas.h"
+#include <QDebug>
 
 Canvas::Canvas(int nWidth, int nHeight) {
     this->nWidth = nWidth;
@@ -6,7 +7,8 @@ Canvas::Canvas(int nWidth, int nHeight) {
     for (int i=0; i<nWidth; i++) {
         QVector<Vector*> curr_vec = {};
         for (int j=0; j<nHeight; j++) {
-            curr_vec.push_back(new Vector(0.0, 0.0, 0.0, 0.0));
+//            curr_vec.push_back(new Vector(0.0, 0.0, 0.0, 0.0));
+            curr_vec.push_back(new Vector(135.0 / 255, 206.0 / 255, 235.0 / 255, 0.0)); // blue sky
         }
         this->aPixels.push_back(curr_vec);
     }
@@ -42,4 +44,5 @@ void Canvas::write_ppm() {
     f_ppm.open("image.ppm");
     f_ppm << sFile.toStdString();
     f_ppm.close();
+    qDebug() << "image written to file :)";
 }

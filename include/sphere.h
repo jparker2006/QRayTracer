@@ -11,11 +11,12 @@
 
 class Sphere {
 public:
-    Sphere(Material *material);
+    Sphere(Material *material, int index);
     QVector<Intersection *> intersection(Ray *ray);
     Vector *normal(Vector *point);
     Matrix *transformation = new Matrix(4, 4);
     Material *material;
+    int index;
 };
 
 #endif // SPHERE_H

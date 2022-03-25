@@ -9,7 +9,7 @@ Computation* Computation::prepare_computations(Ray *ray, Sphere* sphere, Interse
     Computation *computations = new Computation();
     computations->object = sphere;
     computations->ft = intersection->ft;
-    computations->point = ray->position(intersection->ft);
+    computations->point = ray->position(intersection->ft);                                                                                                  
     computations->normal = sphere->normal(computations->point);
     computations->eye = ray->direction->negate();
     if (computations->normal->dot_product(computations->eye) < 0) {

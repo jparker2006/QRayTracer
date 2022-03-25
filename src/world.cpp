@@ -2,7 +2,7 @@
 #include <QDebug>
 
 World::World() {
-
+    this->objects = {};
 }
 
 QVector<Intersection *> World::intersect_world(Ray *ray) {
@@ -23,7 +23,8 @@ Vector* World::shade_hit(Computation *comp) {
 Vector* World::color_at(Ray *ray) {
     QVector<Intersection *> intersections = this->intersect_world(ray);
     if (0 == intersections.length())
-        return new Vector(0, 0, 0, 0); // ray misses (change?)
-    Computation *comp = Computation::prepare_computations(ray, this->objects[0], Intersection::hit(intersections));
+        return new Vector(135.0 / 255, 206.0 / 255, 235.0 / 255, 0.0); // sky blue (normally black)
+    Intersection* intersection = Intersection::hit(intersections);
+    Computation *comp = Computation::prepare_computations(ray, this->objects[intersection->index], intersection);
     return shade_hit(comp);
 }

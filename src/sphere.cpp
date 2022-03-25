@@ -1,12 +1,9 @@
 #include "include/sphere.h"
 
-Sphere::Sphere(Material *material) {
+Sphere::Sphere(Material *material, int index) {
     this->material = material;
-
-    this->transformation->matrice[0][0] = 1;
-    this->transformation->matrice[1][1] = 1;
-    this->transformation->matrice[2][2] = 1;
-    this->transformation->matrice[3][3] = 1;
+    this->index = index;
+    this->transformation = Matrix::identity_matrix();
 }
 
 QVector<Intersection *> Sphere::intersection(Ray *ray) {
@@ -19,8 +16,8 @@ QVector<Intersection *> Sphere::intersection(Ray *ray) {
     if (fDiscriminant < 0)
         return {};
     QVector<Intersection *> intersections = {};
-    intersections.push_back(new Intersection((-fb - qSqrt(fDiscriminant)) / (fa * 2)));
-    intersections.push_back(new Intersection((-fb + qSqrt(fDiscriminant)) / (fa * 2)));
+    intersections.push_back(new Intersection((-fb - qSqrt(fDiscriminant)) / (fa * 2), this->index));
+    intersections.push_back(new Intersection((-fb + qSqrt(fDiscriminant)) / (fa * 2), this->index));
     return intersections;
 }
 
