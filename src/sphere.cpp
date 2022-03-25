@@ -19,8 +19,8 @@ QVector<Intersection *> Sphere::intersection(Ray *ray) {
     if (fDiscriminant < 0)
         return {};
     QVector<Intersection *> intersections = {};
-    intersections.push_back(new Intersection((-fb - qSqrt(fDiscriminant)) / (fa * 2), Intersection::Object::OBJ_SPHERE));
-    intersections.push_back(new Intersection((-fb + qSqrt(fDiscriminant)) / (fa * 2), Intersection::Object::OBJ_SPHERE));
+    intersections.push_back(new Intersection((-fb - qSqrt(fDiscriminant)) / (fa * 2)));
+    intersections.push_back(new Intersection((-fb + qSqrt(fDiscriminant)) / (fa * 2)));
     return intersections;
 }
 

@@ -129,12 +129,17 @@ Matrix* Matrix::dot_product(Matrix *matrix) {
 }
 
 Matrix* Matrix::identity_multiply() {
+    Matrix *identity_matrix = Matrix::identity_matrix();
+    return this->dot_product(identity_matrix);
+}
+
+Matrix* Matrix::identity_matrix() { static
     Matrix *identity_matrix = new Matrix(4, 4);
     identity_matrix->matrice[0][0] = 1;
     identity_matrix->matrice[1][1] = 1;
     identity_matrix->matrice[2][2] = 1;
     identity_matrix->matrice[3][3] = 1;
-    return this->dot_product(identity_matrix);
+    return identity_matrix;
 }
 
 Vector* Matrix::vector_multiply(Vector *vector) {
@@ -277,6 +282,21 @@ Matrix* Matrix::shearing(float fxy, float fxz, float fyx, float fyz, float fzx, 
         {0.0, 0.0, 0.0, 1.0}
     };
     return matrix;
+}
+
+Matrix* Matrix::view_transformation(Vector *from, Vector *to, Vector *up) { static
+    Vector *foward = to->ew_subtract(from)->normalize();
+    up = up->normalize();
+    Vector *left = foward->cross_product(up);
+    Vector *true_up = left->cross_product(foward);
+    Matrix *orientation = new Matrix(4, 4);
+    orientation->matrice = {
+        {left->fx, left->fy, left->fz, 0.0},
+        {true_up->fx, true_up->fy, true_up->fz, 0.0},
+        {-foward->fx, -foward->fy, -foward->fz, 0.0},
+        {0.0, 0.0, 0.0, 1.0}
+    };
+    return orientation->dot_product(Matrix::translation(new Vector(-from->fx, -from->fy, -from->fz, 0.0))); // dot?
 }
 
 QString Matrix::stringify() {

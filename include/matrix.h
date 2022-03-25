@@ -19,6 +19,7 @@ public:
     bool compare(Matrix *matrix);
     Matrix *dot_product(Matrix *matrix);
     Matrix *identity_multiply();
+    static Matrix* identity_matrix();
     Vector *vector_multiply(Vector *vector);
     Vector *to_vector();
     static Matrix *from_vector(Vector *vector);
@@ -34,6 +35,7 @@ public:
     static Matrix *rotate_y(float r);
     static Matrix *rotate_z(float r);
     static Matrix *shearing(float fxy, float fxz, float fyx, float fyz, float fzx, float fzy);
+    static Matrix *view_transformation(Vector *from, Vector *to, Vector *up);
     QString stringify();
 
     int nRows, nColumns;
