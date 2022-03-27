@@ -7,8 +7,7 @@ Canvas::Canvas(int nWidth, int nHeight) {
     for (int i=0; i<nWidth; i++) {
         QVector<Vector*> curr_vec = {};
         for (int j=0; j<nHeight; j++) {
-//            curr_vec.push_back(new Vector(0.0, 0.0, 0.0, 0.0));
-            curr_vec.push_back(new Vector(135.0 / 255, 206.0 / 255, 235.0 / 255, 0.0)); // blue sky
+            curr_vec.push_back(new Vector(0.0, 0.0, 0.0, 0.0));
         }
         this->aPixels.push_back(curr_vec);
     }

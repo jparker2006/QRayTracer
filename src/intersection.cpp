@@ -6,15 +6,14 @@ Intersection::Intersection(float ft, int index) {
     this->index = index;
 }
 
+// this function is wrong
 Intersection* Intersection::hit(QVector<Intersection*> intersections) { static
-    float fMin = 100000000;
+    float fMin = 500000;
     int nIndex = 0;
-    if (0 == intersections.length())
-        return nullptr;
     for (int i=0; i<intersections.length(); i++) {
-        if (intersections[i]->ft > 0 && intersections[i]->ft < fMin) {
-            nIndex = i;
+        if (intersections[i]->ft > 0.0 && intersections[i]->ft < fMin) {
             fMin = intersections[i]->ft;
+            nIndex = i;
         }
     }
     return intersections[nIndex];

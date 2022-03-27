@@ -135,10 +135,10 @@ Matrix* Matrix::identity_multiply() {
 
 Matrix* Matrix::identity_matrix() { static
     Matrix *identity_matrix = new Matrix(4, 4);
-    identity_matrix->matrice[0][0] = 1;
-    identity_matrix->matrice[1][1] = 1;
-    identity_matrix->matrice[2][2] = 1;
-    identity_matrix->matrice[3][3] = 1;
+    identity_matrix->matrice[0][0] = 1.0;
+    identity_matrix->matrice[1][1] = 1.0;
+    identity_matrix->matrice[2][2] = 1.0;
+    identity_matrix->matrice[3][3] = 1.0;
     return identity_matrix;
 }
 
@@ -296,7 +296,7 @@ Matrix* Matrix::view_transformation(Vector *from, Vector *to, Vector *up) { stat
         {-foward->fx, -foward->fy, -foward->fz, 0.0},
         {0.0, 0.0, 0.0, 1.0}
     };
-    return orientation->dot_product(Matrix::translation(new Vector(-from->fx, -from->fy, -from->fz, 0.0))); // dot?
+    return orientation->dot_product(Matrix::translation(new Vector(-from->fx, -from->fy, -from->fz, 0.0)));
 }
 
 QString Matrix::stringify() {

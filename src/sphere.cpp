@@ -1,4 +1,5 @@
 #include "include/sphere.h"
+#include <QDebug>
 
 Sphere::Sphere(Material *material, int index) {
     this->material = material;
@@ -16,8 +17,8 @@ QVector<Intersection *> Sphere::intersection(Ray *ray) {
     if (fDiscriminant < 0)
         return {};
     QVector<Intersection *> intersections = {};
-    intersections.push_back(new Intersection((-fb - qSqrt(fDiscriminant)) / (fa * 2), this->index));
-    intersections.push_back(new Intersection((-fb + qSqrt(fDiscriminant)) / (fa * 2), this->index));
+    intersections.push_back(new Intersection((-fb - qSqrt(fDiscriminant)) / (2.0 * fa), this->index));
+    intersections.push_back(new Intersection((-fb + qSqrt(fDiscriminant)) / (2.0 * fa), this->index));
     return intersections;
 }
 

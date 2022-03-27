@@ -7,7 +7,7 @@
 class Material {
 public:
     Material(Vector *color, float fAmbient, float fDiffuse, float fSpecular, float fShininess);
-    Vector *lighting(Light *light, Vector *point, Vector *eye, Vector *normal);
+    Vector *lighting(Light *light, Vector *point, Vector *eye, Vector *normal, bool bShadowed);
     float fAmbient, fDiffuse, fSpecular, fShininess;
     Vector *color;
 };

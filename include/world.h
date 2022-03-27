@@ -16,6 +16,7 @@ public:
     QVector<Sphere *> objects = {};
     Vector *shade_hit(Computation *comp);
     Vector *color_at(Ray *ray);
+    bool check_shadowed(Vector *point);
 };
 
 #endif // WORLD_H

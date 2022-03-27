@@ -18,5 +18,7 @@ Computation* Computation::prepare_computations(Ray *ray, Sphere* sphere, Interse
     }
     else
         computations->bInside = false;
+    float fEPSILON = 0.0001;
+    computations->over_point = computations->point->ew_add(computations->normal->scalar_multiply(fEPSILON));
     return computations;
 }

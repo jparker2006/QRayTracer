@@ -8,7 +8,9 @@ Material::Material(Vector *color, float fAmbient, float fDiffuse, float fSpecula
     this->fShininess = fShininess;
 }
 
-Vector* Material::lighting(Light *light, Vector *point, Vector *eye, Vector *normal) {
+Vector* Material::lighting(Light *light, Vector *point, Vector *eye, Vector *normal, bool bShadowed) {
+    if (bShadowed)
+        return new Vector(0.11, 0.11, 0.11, 0.0);
     Vector *effective_color = this->color->ew_multiply(light->intensity);
     Vector *vLight = light->position->ew_subtract(point)->normalize();
     Vector *vAmbient = effective_color->scalar_multiply(this->fAmbient);

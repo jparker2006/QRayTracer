@@ -17,14 +17,29 @@ QVector<Intersection *> World::intersect_world(Ray *ray) {
 }
 
 Vector* World::shade_hit(Computation *comp) {
-    return comp->object->material->lighting(this->light, comp->point, comp->eye, comp->normal);
+    bool shadowed = check_shadowed(comp->over_point);
+    return comp->object->material->lighting(this->light, comp->over_point, comp->eye, comp->normal, shadowed);
 }
 
 Vector* World::color_at(Ray *ray) {
     QVector<Intersection *> intersections = this->intersect_world(ray);
-    if (0 == intersections.length())
-        return new Vector(135.0 / 255, 206.0 / 255, 235.0 / 255, 0.0); // sky blue (normally black)
     Intersection* intersection = Intersection::hit(intersections);
+    if (!intersection)
+        return new Vector(0.9, 0.9, 0.9, 0);
     Computation *comp = Computation::prepare_computations(ray, this->objects[intersection->index], intersection);
     return shade_hit(comp);
+}
+
+bool World::check_shadowed(Vector *point) {
+    Vector *v = this->light->position->ew_subtract(point);
+    float fDistance = v->magnitude();
+    Vector *direction = v->normalize();
+    Ray *ray = new Ray(point, direction);
+    QVector<Intersection *> intersections = this->intersect_world(ray);
+    for (int i=0; i<intersections.length(); i++) {
+        if (intersections[i]->ft > 0.0 && intersections[i]->ft < fDistance) {
+            return true;
+        }
+    }
+    return false;
 }
