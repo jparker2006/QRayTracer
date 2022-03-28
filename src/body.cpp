@@ -16,6 +16,7 @@ QVector<Intersection *> Body::intersection(Ray *ray) {
         case OBJ_PLANE:
             return Plane::intersection(this, ray);
     }
+    return {};
 }
 
 Vector* Body::normal(Vector *point) {
@@ -25,5 +26,6 @@ Vector* Body::normal(Vector *point) {
         case OBJ_PLANE:
             return Plane::normal(this, point);
     }
+    return new Vector(0, 0, 0, 0);
 }
 

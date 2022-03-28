@@ -18,14 +18,14 @@ QVector<Intersection *> World::intersect_world(Ray *ray) {
 
 Vector* World::shade_hit(Computation *comp) {
     bool shadowed = check_shadowed(comp->over_point);
-    return comp->object->material->lighting(this->light, comp->over_point, comp->eye, comp->normal, shadowed);
+    return comp->object->material->lighting(this->light, comp->over_point, comp->eye, comp->normal, shadowed, comp->object->transformation);
 }
 
 Vector* World::color_at(Ray *ray) {
     QVector<Intersection *> intersections = this->intersect_world(ray);
     Intersection* intersection = Intersection::hit(intersections);
     if (!intersection)
-        return new Vector(0.9, 0.9, 0.9, 0);
+        return new Vector(0, 0, 0, 0);
     Computation *comp = Computation::prepare_computations(ray, this->objects[intersection->index], intersection);
     return shade_hit(comp);
 }

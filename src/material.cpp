@@ -8,9 +8,11 @@ Material::Material(Vector *color, float fAmbient, float fDiffuse, float fSpecula
     this->fShininess = fShininess;
 }
 
-Vector* Material::lighting(Light *light, Vector *point, Vector *eye, Vector *normal, bool bShadowed) {
+Vector* Material::lighting(Light *light, Vector *point, Vector *eye, Vector *normal, bool bShadowed, Matrix *transformation) {
     if (bShadowed)
-        return new Vector(0.11, 0.11, 0.11, 0.0);
+        return new Vector(0.10, 0.10, 0.10, 0.0);
+    if (this->pattern)
+        this->color = this->pattern->pattern_at(point, transformation);
     Vector *effective_color = this->color->ew_multiply(light->intensity);
     Vector *vLight = light->position->ew_subtract(point)->normalize();
     Vector *vAmbient = effective_color->scalar_multiply(this->fAmbient);

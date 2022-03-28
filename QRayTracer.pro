@@ -2,6 +2,7 @@ QT -= gui
 CONFIG += c++11 console
 CONFIG -= app_bundle
 SOURCES += \
+    src/pattern.cpp \
     src/plane.cpp \
     src/body.cpp \
     src/camera.cpp \
@@ -30,7 +31,8 @@ HEADERS += \
     include/light.h \
     include/material.h \
     include/world.h \
-    include/plane.h
+    include/plane.h \
+    include/pattern.h
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target

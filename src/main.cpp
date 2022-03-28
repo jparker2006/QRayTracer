@@ -15,6 +15,7 @@
 #include "include/computation.h"
 #include "include/camera.h"
 #include "include/plane.h"
+#include "include/pattern.h"
 
 float fEPSILON = 0.0001;
 
@@ -35,23 +36,42 @@ void render(Camera *camera, World *world) {
     image->write_ppm();
 }
 
+
 int main(int argc, char *argv[]) {
     QCoreApplication application(argc, argv);
 
     long lStartTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 
     Camera *cam = new Camera(200, 100, M_PI / 3.0, Matrix::identity_matrix());
-    Vector *from = new Vector(0, 1.5, -5, 1);
+    Vector *from = new Vector(0, 2.5, -5, 1);
     Vector *to = new Vector(0, 1, 0, 1);
     Vector *up = new Vector(0, 1, 0, 0);
     cam->transformation = Matrix::view_transformation(from, to, up);
 
     World *world = new World();
     world->light = new Light(white, new Vector(-10, 10, -10, 1));
-    Material *border_material = new Material(new Vector(1, 0.9, 0.9, 0), 0.1, 0.9, 0.0, 200);
-    Material *middle_material = new Material(new Vector(0.1, 1.0, 0.5, 0.0), 0.2, 0.9, 0.7, 250);
-    Material *right_material = new Material(new Vector(0.5, 1, 0.1, 0.0), 0.2, 0.9, 0.7, 150);
-    Material *left_material = new Material(new Vector(1, 0.8, 0.1, 0.0), 0.2, 0.9, 0.7, 200);
+
+    Pattern *striped = new Pattern(yellow, green, Pattern::PatternType::STRIPED);
+    striped->transformation = striped->transformation->dot_product(Matrix::scaling(new Vector(0.18, 0.18, 0.18, 0)));
+
+    Pattern *gradient = new Pattern(black, white, Pattern::PatternType::GRADIENT);
+    gradient->transformation = gradient->transformation->dot_product(Matrix::scaling(new Vector(10, 10, 10, 0)));
+
+    Pattern *ring = new Pattern(red, blue, Pattern::PatternType::RING);
+    ring->transformation = ring->transformation->dot_product(Matrix::scaling(new Vector(0.18, 0.18, 0.18, 0)));
+    ring->transformation = ring->transformation->dot_product(Matrix::rotate_x(M_PI / 2.0));
+
+    Pattern *checkerboard = new Pattern(cyan, magenta, Pattern::PatternType::CHECKERBOARD);
+    checkerboard->transformation = checkerboard->transformation->dot_product(Matrix::scaling(new Vector(0.18, 0.18, 0.18, 0)));
+
+    Material *floor_material = new Material(new Vector(0.9, 0.9, 0.9, 0), 0.1, 0.9, 0.0, 200);
+    floor_material->pattern = striped;
+    Material *right_material = new Material(new Vector(0.5, 1, 0.1, 0.0), 0.1, 0.9, 0.9, 200);
+    right_material->pattern = gradient;
+    Material *middle_material = new Material(new Vector(0.1, 1.0, 0.5, 0.0), 0.1, 0.9, 0.9, 200);
+    middle_material->pattern = ring;
+    Material *left_material = new Material(new Vector(1, 0.8, 0.1, 0.0), 0.1, 0.9, 0.9, 200);
+    left_material->pattern = checkerboard;
 
     Sphere *middle = new Sphere(middle_material, 0);
     middle->transformation = middle->transformation->dot_product(Matrix::translation(new Vector(-0.5, 1.0, 0.5, 0.0)));
@@ -64,9 +84,9 @@ int main(int argc, char *argv[]) {
     left->transformation = left->transformation->dot_product(Matrix::translation(new Vector(-1.5, 0.33, -0.75, 0.0)));
     left->transformation = left->transformation->dot_product(Matrix::scaling(new Vector(0.33, 0.33, 0.33, 0.0)));
 
-    Plane *floor = new Plane(border_material, 3);
+    Plane *floor = new Plane(floor_material, 3);
 
-    world->objects.push_back(middle);
+    world->objects.push_back(middle); // make world push func that auto increments ids
     world->objects.push_back(right);
     world->objects.push_back(left);
     world->objects.push_back(floor);
@@ -78,10 +98,6 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
-
-
-
-
 
 
 
