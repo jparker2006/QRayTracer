@@ -14,6 +14,7 @@
 #include "include/world.h"
 #include "include/computation.h"
 #include "include/camera.h"
+#include "include/plane.h"
 
 float fEPSILON = 0.0001;
 
@@ -37,6 +38,8 @@ void render(Camera *camera, World *world) {
 int main(int argc, char *argv[]) {
     QCoreApplication application(argc, argv);
 
+    long lStartTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+
     Camera *cam = new Camera(200, 100, M_PI / 3.0, Matrix::identity_matrix());
     Vector *from = new Vector(0, 1.5, -5, 1);
     Vector *to = new Vector(0, 1, 0, 1);
@@ -44,7 +47,7 @@ int main(int argc, char *argv[]) {
     cam->transformation = Matrix::view_transformation(from, to, up);
 
     World *world = new World();
-    world->light = new Light(white, new Vector(-4, 10, -10, 1));
+    world->light = new Light(white, new Vector(-10, 10, -10, 1));
     Material *border_material = new Material(new Vector(1, 0.9, 0.9, 0), 0.1, 0.9, 0.0, 200);
     Material *middle_material = new Material(new Vector(0.1, 1.0, 0.5, 0.0), 0.2, 0.9, 0.7, 250);
     Material *right_material = new Material(new Vector(0.5, 1, 0.1, 0.0), 0.2, 0.9, 0.7, 150);
@@ -61,8 +64,7 @@ int main(int argc, char *argv[]) {
     left->transformation = left->transformation->dot_product(Matrix::translation(new Vector(-1.5, 0.33, -0.75, 0.0)));
     left->transformation = left->transformation->dot_product(Matrix::scaling(new Vector(0.33, 0.33, 0.33, 0.0)));
 
-    Sphere *floor = new Sphere(border_material, 3);
-    floor->transformation = floor->transformation->dot_product(Matrix::scaling(new Vector(10.0, 0.01, 10.0, 0)));
+    Plane *floor = new Plane(border_material, 3);
 
     world->objects.push_back(middle);
     world->objects.push_back(right);
@@ -70,6 +72,9 @@ int main(int argc, char *argv[]) {
     world->objects.push_back(floor);
 
     render(cam, world);
+
+    long lElapsedTime = QDateTime::currentDateTime().toMSecsSinceEpoch() - lStartTime;
+    qDebug() << "rendering finished in" << lElapsedTime << "milliseconds";
 
     return 0;
 }

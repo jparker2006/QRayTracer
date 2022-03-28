@@ -7,13 +7,14 @@
 #include "include/sphere.h"
 #include "include/intersection.h"
 #include "include/computation.h"
+#include "include/body.h"
 
 class World {
 public:
     World();
     QVector<Intersection *> intersect_world(Ray *ray);
     Light *light;
-    QVector<Sphere *> objects = {};
+    QVector<Body *> objects = {};
     Vector *shade_hit(Computation *comp);
     Vector *color_at(Ray *ray);
     bool check_shadowed(Vector *point);

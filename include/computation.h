@@ -3,14 +3,15 @@
 
 #include "include/vector.h"
 #include "include/sphere.h"
+#include "include/body.h"
 
 class Computation {
 public:
     Computation();
-    static Computation* prepare_computations(Ray *ray, Sphere* sphere,  Intersection *intersection);
+    static Computation* prepare_computations(Ray *ray, Body* sphere,  Intersection *intersection);
     float ft;
     Vector *point, *eye, *normal, *over_point;
-    Sphere *object; // polymorph this when adding more objects
+    Body *object; // polymorph this when adding more objects
     bool bInside;
 };
 

@@ -39,9 +39,10 @@ void Canvas::write_ppm() {
         }
         sFile += "\n";
     }
+    std::string sFilePath = "image.ppm";
     std::ofstream f_ppm;
-    f_ppm.open("image.ppm");
+    f_ppm.open(sFilePath);
     f_ppm << sFile.toStdString();
     f_ppm.close();
-    qDebug() << "image written to file :)";
+    qDebug() << "image written to file:" << QString::fromStdString(sFilePath);
 }
