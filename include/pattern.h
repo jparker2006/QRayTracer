@@ -14,10 +14,10 @@ public:
     };
     Pattern(Vector *colorA, Vector *colorB, PatternType type);
     Vector *pattern_at(Vector *point, Matrix *transformation);
-    Vector *stripe_at(Vector *point, Matrix *transformation);
-    Vector *gradient_at(Vector *point, Matrix *transformation);
-    Vector *ring_at(Vector *point, Matrix *transformation);
-    Vector *checker_at(Vector *point, Matrix *transformation);
+    Vector *stripe_at(Vector *point);
+    Vector *gradient_at(Vector *point);
+    Vector *ring_at(Vector *point);
+    Vector *checker_at(Vector *point);
     Vector *calc_pattern_point(Vector *point, Matrix *transformation);
     Vector *colorA, *colorB;
     Matrix *transformation;

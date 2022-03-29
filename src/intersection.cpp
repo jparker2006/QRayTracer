@@ -7,7 +7,9 @@ Intersection::Intersection(float ft, int index) {
 }
 
 // this function is wrong
-Intersection* Intersection::hit(QVector<Intersection*> intersections) { static
+Intersection* Intersection::hit(QVector<Intersection*> intersections) {
+    if (0 == intersections.length())
+        return {};
     float fMin = 500000;
     int nIndex = 0;
     for (int i=0; i<intersections.length(); i++) {

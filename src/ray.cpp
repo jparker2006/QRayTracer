@@ -6,7 +6,10 @@ Ray::Ray(Vector *origin, Vector *direction) {
 }
 
 Vector* Ray::position(float ft) {
-    return this->direction->scalar_multiply(ft)->ew_add(this->origin);
+    Vector *mvDirection = this->direction->scalar_multiply(ft);
+    Vector *vPosition = mvDirection->ew_add(this->origin);
+    delete mvDirection;
+    return vPosition;
 }
 
 Ray* Ray::transform(Matrix *matrix) {

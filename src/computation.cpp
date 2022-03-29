@@ -1,9 +1,7 @@
 #include "include/computation.h"
 #include <QDebug>
 
-Computation::Computation() {
-
-}
+Computation::Computation() {}
 
 Computation* Computation::prepare_computations(Ray *ray, Body* body, Intersection *intersection) { static
     Computation *computations = new Computation();
@@ -19,6 +17,8 @@ Computation* Computation::prepare_computations(Ray *ray, Body* body, Intersectio
     else
         computations->bInside = false;
     float fEPSILON = 0.0001;
-    computations->over_point = computations->point->ew_add(computations->normal->scalar_multiply(fEPSILON));
+    Vector *nvEPSILON = computations->normal->scalar_multiply(fEPSILON);
+    computations->over_point = computations->point->ew_add(nvEPSILON);
+    delete nvEPSILON;
     return computations;
 }

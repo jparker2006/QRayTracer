@@ -8,49 +8,56 @@ Pattern::Pattern(Vector *colorA, Vector *colorB, PatternType type) {
 }
 
 Vector *Pattern::pattern_at(Vector *point, Matrix *transformation) {
-    // maybe calc point in pattern space up here
+    Vector *point_pattern_space = calc_pattern_point(point, transformation);
     switch (this->type) {
         case STRIPED:
-            return stripe_at(point, transformation);
+            return stripe_at(point_pattern_space);
         case GRADIENT:
-            return gradient_at(point, transformation);
+            return gradient_at(point_pattern_space);
         case RING:
-            return ring_at(point, transformation);
+            return ring_at(point_pattern_space);
         case CHECKERBOARD:
-            return checker_at(point, transformation);
+            return checker_at(point_pattern_space);
     }
     return new Vector(0, 0, 0, 0);
 }
 
-Vector *Pattern::stripe_at(Vector *point, Matrix *transformation) {
-    Vector *pattern_point = calc_pattern_point(point, transformation);
-    return 0 == qFloor(pattern_point->fx) % 2 ? colorA : colorB;
+Vector *Pattern::stripe_at(Vector *point) {
+    return 0 == qFloor(point->fx) % 2 ? colorA : colorB;
 }
 
-Vector *Pattern::gradient_at(Vector *point, Matrix *transformation) {
-    Vector *pattern_point = calc_pattern_point(point, transformation);
+Vector *Pattern::gradient_at(Vector *point) { // wrong i think (only does greyscale)
     Vector *distance_from_colors = this->colorB->ew_subtract(this->colorA);
-    float fFraction = pattern_point->fx - qFloor(pattern_point->fx);
-    return this->colorA->scalar_add(distance_from_colors->fx * fFraction);
+    float fFraction = point->fx - qFloor(point->fx);
+    float x = distance_from_colors->fx;
+    delete distance_from_colors;
+    return this->colorA->scalar_add(x * fFraction);
 }
 
-Vector *Pattern::ring_at(Vector *point, Matrix *transformation) {
-    Vector *pattern_point = calc_pattern_point(point, transformation);
-    float fx = pattern_point->fx;
-    float fz = pattern_point->fz;
+Vector *Pattern::ring_at(Vector *point) {
+    float fx = point->fx;
+    float fz = point->fz;
     float fdistance_from_center = qSqrt(qPow(fx, 2) + qPow(fz, 2));
     return 0 == qFloor(fdistance_from_center) % 2 ? this->colorA : this->colorB;
 }
 
-Vector *Pattern::checker_at(Vector *point, Matrix *transformation) {
-    Vector *pattern_point = calc_pattern_point(point, transformation);
-    float fsum = qAbs(pattern_point->fx) + qAbs(pattern_point->fy) + qAbs(pattern_point->fz);
+Vector *Pattern::checker_at(Vector *point) {
+    float fsum = qAbs(point->fx) + qAbs(point->fy) + qAbs(point->fz);
     return 0 == qFloor(fsum) % 2 ? this->colorA : this->colorB;
 }
 
 Vector *Pattern::calc_pattern_point(Vector *point, Matrix *transformation) {
-    Vector *object_point = transformation->inverse()->vector_multiply(point);
-    Vector *pattern_point = this->transformation->inverse()->vector_multiply(object_point);
+    Matrix *mObject_Transformation = transformation->inverse();
+    Matrix *mPattern_Transformation = this->transformation->inverse();
+    Vector *object_point = mObject_Transformation->vector_multiply(point);
+    Vector *pattern_point = mPattern_Transformation->vector_multiply(object_point);
+    delete object_point;
+    delete mObject_Transformation;
+    delete mPattern_Transformation;
     return pattern_point;
 }
+
+
+
+
 

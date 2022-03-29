@@ -71,12 +71,10 @@ Vector* Vector::cross_product(Vector *vec) {
 }
 
 Vector* Vector::identity_multiply() {
-    Matrix *identity_matrix = new Matrix(4, 4);
-    identity_matrix->matrice[0][0] = 1;
-    identity_matrix->matrice[1][1] = 1;
-    identity_matrix->matrice[2][2] = 1;
-    identity_matrix->matrice[3][3] = 1;
-    return identity_matrix->vector_multiply(this);
+    Matrix *identity_matrix = Matrix::identity_matrix();
+    Vector *identitied_vector = identity_matrix->vector_multiply(this);
+    delete identity_matrix;
+    return identitied_vector;
 }
 
 Vector* Vector::reflect(Vector *normal) {

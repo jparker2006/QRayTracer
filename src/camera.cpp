@@ -27,8 +27,13 @@ Ray *Camera::ray_for_pixel(float fx, float fy) {
     float fyoff = (fy + 0.5) * this->fpixel_size;
     float world_x = this->half_width - fxoff;
     float world_y = this->half_height - fyoff;
-    Vector *vPixel = this->transformation->inverse()->vector_multiply(new Vector(world_x, world_y, -1, 1));
-    Vector *vOrigin = this->transformation->inverse()->vector_multiply(new Vector(0, 0, 0, 1));
-    Vector *vDirection = vPixel->ew_subtract(vOrigin)->normalize();
-    return new Ray(vOrigin, vDirection);
+    Matrix *mInverse = this->transformation->inverse();
+    Vector *vPixel = mInverse->vector_multiply(new Vector(world_x, world_y, -1, 1));
+    Vector *vOrigin = mInverse->vector_multiply(new Vector(0, 0, 0, 1));
+    delete mInverse;
+    Vector *vDirection = vPixel->ew_subtract(vOrigin);
+    Vector *nvDirection = vDirection->normalize();
+    delete vPixel;
+    delete vDirection;
+    return new Ray(vOrigin, nvDirection);
 }

@@ -130,7 +130,9 @@ Matrix* Matrix::dot_product(Matrix *matrix) {
 
 Matrix* Matrix::identity_multiply() {
     Matrix *identity_matrix = Matrix::identity_matrix();
-    return this->dot_product(identity_matrix);
+    Matrix* mResult = this->dot_product(identity_matrix);
+    delete identity_matrix;
+    return mResult;
 }
 
 Matrix* Matrix::identity_matrix() { static
@@ -143,8 +145,12 @@ Matrix* Matrix::identity_matrix() { static
 }
 
 Vector* Matrix::vector_multiply(Vector *vector) {
-    Matrix *matrix = Matrix::from_vector(vector);
-    return this->dot_product(matrix)->to_vector();
+    Matrix *mat = Matrix::from_vector(vector);
+    Matrix *dotted = this->dot_product(mat);
+    Vector *vector_final = dotted->to_vector();
+//    delete mat;
+    delete dotted;
+    return vector_final;
 }
 
 Vector* Matrix::to_vector() {
@@ -173,7 +179,6 @@ Matrix* Matrix::transpose() {
 float Matrix::determinant() {
     if (2 == this->nColumns && 2 == this->nRows)
         return this->matrice[0][0] * this->matrice[1][1] - this->matrice[0][1] * this->matrice[1][0];
-
     float fDeterminant = 0.0;
     for (int i=0; i<this->nColumns; i++) {
         fDeterminant += this->matrice[0][i] * this->cofactor(0, i);
@@ -193,7 +198,10 @@ Matrix* Matrix::submatrix(int nRow, int nCol) {
 }
 
 float Matrix::minor(int nRow, int nCol) {
-    return this->submatrix(nRow, nCol)->determinant();
+    Matrix *submatrix = this->submatrix(nRow, nCol);
+    float fminor = submatrix->determinant();
+    delete submatrix;
+    return fminor;
 }
 
 float Matrix::cofactor(int nRow, int nCol) {
@@ -285,7 +293,9 @@ Matrix* Matrix::shearing(float fxy, float fxz, float fyx, float fyz, float fzx, 
 }
 
 Matrix* Matrix::view_transformation(Vector *from, Vector *to, Vector *up) { static
-    Vector *foward = to->ew_subtract(from)->normalize();
+    Vector *abfoward = to->ew_subtract(from);
+    Vector *foward = abfoward->normalize();
+    delete abfoward;
     up = up->normalize();
     Vector *left = foward->cross_product(up);
     Vector *true_up = left->cross_product(foward);
@@ -296,6 +306,9 @@ Matrix* Matrix::view_transformation(Vector *from, Vector *to, Vector *up) { stat
         {-foward->fx, -foward->fy, -foward->fz, 0.0},
         {0.0, 0.0, 0.0, 1.0}
     };
+    delete foward;
+    delete left;
+    delete true_up;
     return orientation->dot_product(Matrix::translation(new Vector(-from->fx, -from->fy, -from->fz, 0.0)));
 }
 

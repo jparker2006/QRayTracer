@@ -45,4 +45,9 @@ void Canvas::write_ppm() {
     f_ppm << sFile.toStdString();
     f_ppm.close();
     qDebug() << "image written to file:" << QString::fromStdString(sFilePath);
+    for (int i=0; i<nWidth; i++) {
+        for (int j=0; j<nHeight; j++) {
+            delete this->aPixels[i][j];
+        }
+    }
 }
