@@ -13,6 +13,7 @@ public:
     float fAmbient, fDiffuse, fSpecular, fShininess;
     Vector *color;
     Pattern *pattern;
+    float fReflective = 0, fTransparency = 0, fRefractive_Index = 1;
 };
 
 #endif // MATERIAL_H

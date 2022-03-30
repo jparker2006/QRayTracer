@@ -83,6 +83,10 @@ Vector* Vector::reflect(Vector *normal) {
     return this->ew_subtract(normal);
 }
 
+Vector* Vector::from_rgb(float r, float g, float b) {
+    return new Vector(r / 255.0, g / 255.0, b / 255.0, 0);
+}
+
 QString Vector::stringify() {
     QString sVec = "";
     sVec += "{ x: " + QString::number(this->fx);

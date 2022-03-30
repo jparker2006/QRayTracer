@@ -148,7 +148,6 @@ Vector* Matrix::vector_multiply(Vector *vector) {
     Matrix *mat = Matrix::from_vector(vector);
     Matrix *dotted = this->dot_product(mat);
     Vector *vector_final = dotted->to_vector();
-//    delete mat;
     delete dotted;
     return vector_final;
 }

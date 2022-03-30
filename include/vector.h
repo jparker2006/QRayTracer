@@ -24,6 +24,7 @@ public:
     Vector *identity_multiply();
     Vector *reflect(Vector *normal);
     QString stringify();
+    static Vector *from_rgb(float r, float g, float b);
 };
 
 #endif // VECTOR_H
