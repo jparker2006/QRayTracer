@@ -22,6 +22,7 @@ public:
     Vector *colorA, *colorB;
     Matrix *transformation;
     PatternType type;
+    void transform(Matrix *matrix);
 };
 
 #endif // PATTERN_H

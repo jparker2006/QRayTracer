@@ -10,7 +10,7 @@ Intersection::Intersection(float ft, int index) {
 Intersection* Intersection::hit(QVector<Intersection*> intersections) {
     if (0 == intersections.length())
         return {};
-    float fMin = 500000;
+    float fMin = Q_INFINITY;
     int nIndex = 0;
     for (int i=0; i<intersections.length(); i++) {
         if (intersections[i]->ft > 0.0 && intersections[i]->ft < fMin) {

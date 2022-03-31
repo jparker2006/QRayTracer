@@ -1,7 +1,7 @@
 #include "include/sphere.h"
 #include <QDebug>
 
-Sphere::Sphere(Material *material, int index): Body(material, index, Body::OBJ_TYPE::OBJ_SPHERE) {}
+Sphere::Sphere(Material *material): Body(material, Body::OBJ_TYPE::OBJ_SPHERE) {}
 
 QVector<Intersection *> Sphere::intersection(Body *body, Ray *ray) {
     Matrix *mInverse = body->transformation->inverse();

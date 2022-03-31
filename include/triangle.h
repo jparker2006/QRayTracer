@@ -1,5 +1,5 @@
-#ifndef SPHERE_H
-#define SPHERE_H
+#ifndef TRIANGLE_H
+#define TRIANGLE_H
 
 #include <QVector>
 
@@ -10,11 +10,11 @@
 #include "include/material.h"
 #include "include/body.h"
 
-class Sphere: public Body {
+class Triangle: public Body {
 public:
-    Sphere(Material *material);
+    Triangle(Material *material);
     static QVector<Intersection *> intersection(Body *body, Ray *ray);
     static Vector *normal(Body *body, Vector *point);
 };
 
-#endif // SPHERE_H
+#endif // TRIANGLE_H

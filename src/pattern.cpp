@@ -42,7 +42,7 @@ Vector *Pattern::ring_at(Vector *point) {
 }
 
 Vector *Pattern::checker_at(Vector *point) {
-    float fsum = qAbs(point->fx) + qAbs(point->fy) + qAbs(point->fz);
+    float fsum = qFloor(point->fx) + qFloor(point->fy) + qFloor(point->fz);
     return 0 == qFloor(fsum) % 2 ? this->colorA : this->colorB;
 }
 
@@ -55,6 +55,10 @@ Vector *Pattern::calc_pattern_point(Vector *point, Matrix *transformation) {
     delete mObject_Transformation;
     delete mPattern_Transformation;
     return pattern_point;
+}
+
+void Pattern::transform(Matrix *matrix) {
+    this->transformation = this->transformation->dot_product(matrix);
 }
 
 

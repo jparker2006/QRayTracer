@@ -1,5 +1,5 @@
-#ifndef SPHERE_H
-#define SPHERE_H
+#ifndef CUBE_H
+#define CUBE_H
 
 #include <QVector>
 
@@ -10,11 +10,12 @@
 #include "include/material.h"
 #include "include/body.h"
 
-class Sphere: public Body {
+class Cube: public Body {
 public:
-    Sphere(Material *material);
+    Cube(Material *material);
     static QVector<Intersection *> intersection(Body *body, Ray *ray);
     static Vector *normal(Body *body, Vector *point);
+    static QVector<float> check_axis(float fOrigin, float fDirection);
 };
 
-#endif // SPHERE_H
+#endif // CUBE_H

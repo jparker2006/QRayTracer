@@ -21,6 +21,7 @@ public:
     Vector* reflected_color(Computation *comp, int nRemaining);
     Vector *refracted_color(Computation *comp, int nRemaining);
     float schlick_approximation(Computation *comp);
+    void push(Body *body);
 };
 
 #endif // WORLD_H

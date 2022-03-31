@@ -1,6 +1,6 @@
 #include "include/plane.h"
 
-Plane::Plane(Material *material, int index): Body(material, index, Body::OBJ_TYPE::OBJ_PLANE) {}
+Plane::Plane(Material *material): Body(material, Body::OBJ_TYPE::OBJ_PLANE) {}
 
 QVector<Intersection *> Plane::intersection(Body *body, Ray *ray) {
     ray = ray->transform(body->transformation->inverse());

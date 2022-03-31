@@ -39,7 +39,6 @@ Vector* World::color_at(Ray *ray, int nRemaining) {
         return new Vector(0, 0, 0, 0);
     Computation *comp = Computation::prepare_computations(ray, this->objects[intersection->index], intersection, intersections, this->objects);
     delete intersection;
-    delete ray;
     return shade_hit(comp, nRemaining);
 }
 
@@ -97,3 +96,12 @@ float World::schlick_approximation(Computation *comp) {
     float fr0 = qPow((comp->n1 - comp->n2) / (comp->n1 + comp->n2), 2);
     return fr0 + (1.0 - fr0) * qPow(1.0 - fcos, 5);
 }
+
+void World::push(Body *body) {
+    body->index = this->objects.size();
+    this->objects.push_back(body);
+}
+
+
+
+

@@ -1,5 +1,5 @@
-#ifndef SPHERE_H
-#define SPHERE_H
+#ifndef CONE_H
+#define CONE_H
 
 #include <QVector>
 
@@ -10,11 +10,12 @@
 #include "include/material.h"
 #include "include/body.h"
 
-class Sphere: public Body {
+class Cone: public Body {
 public:
-    Sphere(Material *material);
+    Cone(Material *material);
     static QVector<Intersection *> intersection(Body *body, Ray *ray);
     static Vector *normal(Body *body, Vector *point);
+    static bool check_caps(Ray *ray, float ft);
 };
 
-#endif // SPHERE_H
+#endif // CONE_H
