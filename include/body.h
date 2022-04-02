@@ -15,7 +15,8 @@ public:
         OBJ_CUBE,
         OBJ_CYLINDER,
         OBJ_TRIANGLE,
-        OBJ_CONE
+        OBJ_CONE,
+        OBJ_GROUP
     };
     Body(Material *material, OBJ_TYPE type);
     QVector<Intersection *> intersection(Ray *ray);
@@ -27,8 +28,12 @@ public:
     OBJ_TYPE type;
 
     // cylinder data
-    float fMin = -Q_INFINITY, fMax = Q_INFINITY;
+    float fMin = -10, fMax = 10;
     bool bClosed = false;
+
+    // group data
+    Body *parent = nullptr;
+    QVector<Body*> vChildren;
 };
 
 #endif // BODY_H

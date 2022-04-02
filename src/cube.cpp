@@ -3,17 +3,14 @@
 
 Cube::Cube(Material *material): Body(material, OBJ_CUBE) { }
 
-Vector* Cube::normal(Body *body, Vector *point) {
-    Matrix *mInverse = body->transformation->inverse();
-    Vector *obj_point = mInverse->vector_multiply(point);
-    delete mInverse;
-    float fmaxc = qMax(qMax(qAbs(obj_point->fx), qAbs(obj_point->fy)), qAbs(obj_point->fz));
-    if (qAbs(obj_point->fx) == fmaxc)
-        return new Vector(obj_point->fx, 0, 0, 0);
-    if (qAbs(obj_point->fy) == fmaxc)
-        return new Vector(0, obj_point->fy, 0, 0);
-    if (qAbs(obj_point->fz) == fmaxc)
-        return new Vector(0, 0, obj_point->fz, 0);
+Vector* Cube::normal(Vector *point) {
+    float fmaxc = qMax( qMax( qAbs(point->fx), qAbs(point->fy) ), qAbs(point->fz) );
+    if (qAbs(point->fx) == fmaxc)
+        return new Vector(point->fx, 0, 0, 0);
+    else if (qAbs(point->fy) == fmaxc)
+        return new Vector(0, point->fy, 0, 0);
+    else if (qAbs(point->fz) == fmaxc)
+        return new Vector(0, 0, point->fz, 0);
     return nullptr;
 }
 

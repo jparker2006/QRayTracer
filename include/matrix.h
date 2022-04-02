@@ -29,14 +29,15 @@ public:
     float minor(int nRow, int nCol);
     float cofactor(int nRow, int nCol);
     Matrix *inverse();
-    static Matrix *translation(Vector *vec);
-    static Matrix *scaling(Vector *vec);
+    static Matrix *translation(float fx, float fy, float fz);
+    static Matrix *scaling(float fx, float fy, float fz);
     static Matrix *rotate_x(float r);
     static Matrix *rotate_y(float r);
     static Matrix *rotate_z(float r);
     static Matrix *shearing(float fxy, float fxz, float fyx, float fyz, float fzx, float fzy);
     static Matrix *view_transformation(Vector *from, Vector *to, Vector *up);
     QString stringify();
+    Matrix *clone();
 
     int nRows, nColumns;
     QVector<QVector<float>> matrice = {};

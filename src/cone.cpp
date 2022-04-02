@@ -43,23 +43,17 @@ QVector<Intersection *> Cone::intersection(Body *body, Ray *ray) {
 }
 
 Vector* Cone::normal(Body *body, Vector *point) {
-    Matrix *mInverse = body->transformation->inverse();
-    Vector *obj_point = mInverse->vector_multiply(point);
-    delete mInverse;
     float fEPSILON = 0.0001;
-    float fDist = qPow(obj_point->fx, 2) + qPow(obj_point->fz, 2);
-    if (fDist < 1.0 && obj_point->fy >= body->fMax - fEPSILON)
+    float fDist = qPow(point->fx, 2) + qPow(point->fz, 2);
+    if (fDist < 1.0 && point->fy >= body->fMax - fEPSILON)
         return new Vector(0, 1, 0, 0);
-    else if (fDist < 1.0 && obj_point->fy <= body->fMin + fEPSILON)
+    else if (fDist < 1.0 && point->fy <= body->fMin + fEPSILON)
         return new Vector(0, -1, 0, 0);
-    float fy = qSqrt(qPow(obj_point->fx, 2) + qPow(obj_point->fz, 2));
+    float fy = qSqrt(qPow(point->fx, 2) + qPow(point->fz, 2));
     if (fy > 0)
         fy *= -1;
-    return new Vector(obj_point->fx, fy, obj_point->fz, 0);
+    return new Vector(point->fx, fy, point->fz, 0);
 }
-
-//y ← √(point.x² + point.z²)
-//y ← -y if point.y > 0
 
 bool Cone::check_caps(Ray *ray, float ft) {
     float fx = ray->origin->fx + ft * ray->direction->fx;

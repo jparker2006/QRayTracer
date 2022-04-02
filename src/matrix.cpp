@@ -1,4 +1,5 @@
 #include "include/matrix.h"
+#include <QDebug>
 
 Matrix::Matrix(int nRows, int nColumns) {
     this->nRows = nRows;
@@ -212,8 +213,10 @@ float Matrix::cofactor(int nRow, int nCol) {
 
 Matrix* Matrix::inverse() {
     float fDeterminant = this->determinant();
-    if (0 == fDeterminant)
+    if (0 == fDeterminant) {
+        qDebug() << "cant be inverted";
         return nullptr;
+    }
     Matrix *matrix = new Matrix(this->nRows, this->nColumns);
     for (int i=0; i<this->nRows; i++) {
         for (int j=0; j<this->nColumns; j++) {
@@ -224,23 +227,23 @@ Matrix* Matrix::inverse() {
     return matrix;
 }
 
-Matrix* Matrix::translation(Vector *vec) { static
+Matrix* Matrix::translation(float fx, float fy, float fz) { static
     Matrix *matrix = new Matrix(4, 4);
     matrix->matrice = {
-        {1.0, 0.0, 0.0, vec->fx},
-        {0.0, 1.0, 0.0, vec->fy},
-        {0.0, 0.0, 1.0, vec->fz},
+        {1.0, 0.0, 0.0, fx},
+        {0.0, 1.0, 0.0, fy},
+        {0.0, 0.0, 1.0, fz},
         {0.0, 0.0, 0.0, 1.0}
     };
     return matrix;
 }
 
-Matrix* Matrix::scaling(Vector *vec) { static
+Matrix* Matrix::scaling(float fx, float fy, float fz) { static
     Matrix *matrix = new Matrix(4, 4);
     matrix->matrice = {
-        {vec->fx, 0.0, 0.0, 0.0},
-        {0.0, vec->fy, 0.0, 0.0},
-        {0.0, 0.0, vec->fz, 0.0},
+        {fx, 0.0, 0.0, 0.0},
+        {0.0, fy, 0.0, 0.0},
+        {0.0, 0.0, fz, 0.0},
         {0.0, 0.0, 0.0, 1.0}
     };
     return matrix;
@@ -308,7 +311,13 @@ Matrix* Matrix::view_transformation(Vector *from, Vector *to, Vector *up) { stat
     delete foward;
     delete left;
     delete true_up;
-    return orientation->dot_product(Matrix::translation(new Vector(-from->fx, -from->fy, -from->fz, 0.0)));
+    return orientation->dot_product(Matrix::translation(-from->fx, -from->fy, -from->fz));
+}
+
+Matrix* Matrix::clone() {
+    Matrix *matrix = new Matrix(this->nRows, this->nColumns);
+    matrix->matrice = this->matrice;
+    return matrix;
 }
 
 QString Matrix::stringify() {

@@ -20,7 +20,7 @@ Vector* Material::lighting(Light *light, Vector *point, Vector *eye, Vector *nor
     delete v_ab_Light;
     float flight_dot_normal = vLight->dot_product(normal);
     Vector *vDiffuse, *vSpecular;
-    if (flight_dot_normal < 0) { // check this
+    if (flight_dot_normal < 0) {
         vDiffuse = new Vector(0.0, 0.0, 0.0, 0.0);
         vSpecular = new Vector(0.0, 0.0, 0.0, 0.0);
     }

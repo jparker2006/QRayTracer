@@ -14,7 +14,6 @@ class Plane: public Body {
 public:
     Plane(Material *material);
     static QVector<Intersection *> intersection(Body *body, Ray *ray);
-    static Vector *normal(Body *body, Vector *point);
 };
 
 #endif // PLANE_H

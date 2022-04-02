@@ -1,5 +1,5 @@
-#ifndef CYLINDER_H
-#define CYLINDER_H
+#ifndef GROUP_H
+#define GROUP_H
 
 #include <QVector>
 
@@ -10,12 +10,14 @@
 #include "include/material.h"
 #include "include/body.h"
 
-class Cylinder: public Body {
+class Group: public Body {
 public:
-    Cylinder(Material *material);
+    Group(Material *material);
     static QVector<Intersection *> intersection(Body *body, Ray *ray);
     static Vector *normal(Body *body, Vector *point);
-    static bool check_caps(Ray *ray, float ft);
+    static Vector *world_to_obj_space(Body *body, Vector *point);
+    static Vector *normal_to_world_space(Body *body, Vector *normal);
+    void push(Body *body);
 };
 
-#endif // CYLINDER_H
+#endif // GROUP_H

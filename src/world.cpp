@@ -42,6 +42,7 @@ Vector* World::color_at(Ray *ray, int nRemaining) {
     return shade_hit(comp, nRemaining);
 }
 
+// color_at redundancy
 Vector* World::reflected_color(Computation *comp, int nRemaining) {
     if (0 == comp->object->material->fReflective || nRemaining <= 0)
         return new Vector(0, 0, 0, 0);

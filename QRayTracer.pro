@@ -2,6 +2,7 @@ QT -= gui
 CONFIG += c++11 console
 CONFIG -= app_bundle
 SOURCES += \
+    src/group.cpp \
     src/cone.cpp \
     src/cylinder.cpp \
     src/cube.cpp \
@@ -22,6 +23,7 @@ SOURCES += \
     src/world.cpp \
     src/triangle.cpp
 HEADERS += \
+    include/group.h \
     include/cone.h \
     include/cylinder.h \
     include/cube.h \

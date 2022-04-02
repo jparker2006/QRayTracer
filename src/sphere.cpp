@@ -23,13 +23,11 @@ QVector<Intersection *> Sphere::intersection(Body *body, Ray *ray) {
 
 Vector* Sphere::normal(Body *body, Vector *point) {
     Matrix *mInverse = body->transformation->inverse();
-    Vector *obj_point = mInverse->vector_multiply(point);
-    Vector *obj_normal = obj_point->ew_subtract(new Vector(0, 0, 0, 1));
+    Vector *obj_normal = point->ew_subtract(new Vector(0, 0, 0, 1));
     Matrix *mtInverse = mInverse->transpose();
     Vector *wrld_normal = mtInverse->vector_multiply(obj_normal);
     wrld_normal->fw = 0.0;
     delete obj_normal;
-    delete obj_point;
     delete mInverse;
     delete mtInverse;
     return wrld_normal->normalize();

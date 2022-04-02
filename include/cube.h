@@ -14,7 +14,7 @@ class Cube: public Body {
 public:
     Cube(Material *material);
     static QVector<Intersection *> intersection(Body *body, Ray *ray);
-    static Vector *normal(Body *body, Vector *point);
+    static Vector *normal(Vector *point);
     static QVector<float> check_axis(float fOrigin, float fDirection);
 };
 
