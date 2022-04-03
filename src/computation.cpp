@@ -1,5 +1,5 @@
 #include "include/computation.h"
-#include <QVector>
+#include <QDebug>
 
 Computation::Computation() {}
 
@@ -7,7 +7,7 @@ Computation* Computation::prepare_computations(Ray *ray, Body* body, Intersectio
     Computation *computations = new Computation();
     computations->object = body;
     computations->ft = intersection->ft;
-    computations->point = ray->position(intersection->ft);                                                                                                  
+    computations->point = ray->position(intersection->ft);
     computations->normal = body->normal(computations->point);
     computations->eye = ray->direction->negate();
     if (computations->normal->dot_product(computations->eye) < 0) {
@@ -22,7 +22,6 @@ Computation* Computation::prepare_computations(Ray *ray, Body* body, Intersectio
     computations->under_point = computations->point->ew_subtract(nvEPSILON);
     delete nvEPSILON;
     computations->reflect = ray->direction->reflect(computations->normal);
-
     QVector<Body*> container = {};
     for (int i=0; i<xs.length(); i++) {
         if (intersection->index == xs[i]->index && xs[i]->ft == intersection->ft) {

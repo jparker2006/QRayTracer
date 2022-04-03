@@ -2,11 +2,11 @@
  TODO:
  bounding-boxes
  csg
- triangles
  obj parser
  anti aliasing
  soft shadows
  blur
+ multithreading
 */
 #include <QCoreApplication>
 #include <QDebug>
@@ -32,11 +32,20 @@
 #include "include/group.h"
 #include "include/triangle.h"
 #include "include/parser.h"
+#include "include/thread.h"
 
-float fEPSILON = 0.0001;
-
-bool fuzzy_eq(float x, float y) {
-    return qAbs(x - y) < fEPSILON;
+int main(int argc, char *argv[]) {
+    QCoreApplication application(argc, argv);
+    QMutex *mutex = new QMutex();
+    Vector *data = new Vector(0, 0, 0, 0);
+    Thread *t1 = new Thread(0, 0, mutex, data); // x
+    Thread *t2 = new Thread(0, 1, mutex, data); // y
+    Thread *t3 = new Thread(0, 2, mutex, data); // z
+    t1->start();
+    t2->start();
+    t3->start();
+    qDebug() << data->stringify();
+    return application.exec();
 }
 
 void render(Camera *camera, World *world) {
@@ -53,22 +62,28 @@ void render(Camera *camera, World *world) {
     image->write_ppm();
 }
 
-int main(int argc, char *argv[]) {
-    QCoreApplication application(argc, argv);
-    long lStartTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+//int main(int argc, char *argv[]) {
+//    QCoreApplication application(argc, argv);
+//    long lStartTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 
-    Camera *cam = new Camera(700, 700, M_PI / 3.0, Matrix::identity_matrix());
-    Vector *from = new Vector(0, 3, -3, 1);
-    Vector *to = new Vector(0, 1, 0, 1);
-    Vector *up = new Vector(0, 1, 0, 0);
-    cam->transformation = Matrix::view_transformation(from, to, up);
+//    Camera *cam = new Camera(30, 30, M_PI / 3.0, Matrix::identity_matrix());
+//    Vector *from = new Vector(0.0, 1.5, -5.0, 1);
+//    Vector *to = new Vector(0, 1, 0, 1);
+//    Vector *up = new Vector(0, 1, 0, 0);
+//    cam->transformation = Matrix::view_transformation(from, to, up);
 
-    World *world = new World();
-    world->light = new Light(white, new Vector(-10, 10, -10, 1));
+//    World *world = new World();
+//    world->light = new Light(white, new Vector(-10, 10, -10, 1));
 
-    render(cam, world);
+//    Parser *parser = new Parser();
+//    QString sFile = "/home/jparker/Desktop/teapot.obj";
+//    Group *g = parser->parse_file(sFile);
 
-    long lElapsedTime = QDateTime::currentDateTime().toMSecsSinceEpoch() - lStartTime;
-    qDebug() << "rendering finished in" << lElapsedTime << "milliseconds";
-    return 0;
-}
+//    world->push(g);
+
+//    render(cam, world);
+
+//    long lElapsedTime = QDateTime::currentDateTime().toMSecsSinceEpoch() - lStartTime;
+//    qDebug() << "rendering finished in" << lElapsedTime << "milliseconds";
+//    return 0;
+//}

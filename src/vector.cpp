@@ -79,8 +79,10 @@ Vector* Vector::identity_multiply() {
 
 Vector* Vector::reflect(Vector *normal) {
     float in_dot_normal = this->dot_product(normal);
-    normal = normal->scalar_multiply(2 * in_dot_normal);
-    return this->ew_subtract(normal);
+    Vector *multed = normal->scalar_multiply(2 * in_dot_normal);
+    Vector *final = this->ew_subtract(multed);
+    delete multed;
+    return final;
 }
 
 Vector* Vector::from_rgb(float r, float g, float b) {

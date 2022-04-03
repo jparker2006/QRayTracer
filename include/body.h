@@ -26,6 +26,7 @@ public:
     Material *material;
     int index;
     OBJ_TYPE type;
+    Matrix *mInverse;
 
     // cylinder data
     float fMin = -10, fMax = 10;

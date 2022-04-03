@@ -1,4 +1,5 @@
 #include "include/material.h"
+#include <QDebug>
 
 Material::Material(Vector *color, float fAmbient, float fDiffuse, float fSpecular, float fShininess) {
     this->color = color;
@@ -9,8 +10,9 @@ Material::Material(Vector *color, float fAmbient, float fDiffuse, float fSpecula
 }
 
 Vector* Material::lighting(Light *light, Vector *point, Vector *eye, Vector *normal, bool bShadowed, Matrix *transformation) {
-    if (this->pattern)
+    if (this->pattern) {
         this->color = this->pattern->pattern_at(point, transformation);
+    }
     Vector *effective_color = this->color->ew_multiply(light->intensity);
     Vector *vAmbient = effective_color->scalar_multiply(this->fAmbient);
     if (bShadowed)

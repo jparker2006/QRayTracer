@@ -1,4 +1,5 @@
 #include "include/pattern.h"
+#include <QDebug>
 
 Pattern::Pattern(Vector *colorA, Vector *colorB, PatternType type) {
     this->colorA = colorA;

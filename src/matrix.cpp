@@ -54,8 +54,10 @@ Matrix* Matrix::scalar_divide(float s) {
 }
 
 Matrix* Matrix::ew_add(Matrix *matrix) {
-    if (matrix->nRows != this->nRows || matrix->nColumns != this->nColumns)
+    if (matrix->nRows != this->nRows || matrix->nColumns != this->nColumns) {
+        qDebug() << "cannot do element wise operation";
         return nullptr;
+    }
     Matrix *new_matrix = new Matrix(this->nRows, this->nColumns);
     for (int i=0; i<this->nRows; i++) {
         for (int j=0; j<this->nColumns; j++) {
@@ -66,8 +68,10 @@ Matrix* Matrix::ew_add(Matrix *matrix) {
 }
 
 Matrix* Matrix::ew_subtract(Matrix *matrix) {
-    if (matrix->nRows != this->nRows || matrix->nColumns != this->nColumns)
+    if (matrix->nRows != this->nRows || matrix->nColumns != this->nColumns) {
+        qDebug() << "cannot do element wise operation";
         return nullptr;
+    }
     Matrix *new_matrix = new Matrix(this->nRows, this->nColumns);
     for (int i=0; i<this->nRows; i++) {
         for (int j=0; j<this->nColumns; j++) {
@@ -78,8 +82,10 @@ Matrix* Matrix::ew_subtract(Matrix *matrix) {
 }
 
 Matrix* Matrix::ew_multiply(Matrix *matrix) {
-    if (matrix->nRows != this->nRows || matrix->nColumns != this->nColumns)
+    if (matrix->nRows != this->nRows || matrix->nColumns != this->nColumns) {
+        qDebug() << "cannot do element wise operation";
         return nullptr;
+    }
     Matrix *new_matrix = new Matrix(this->nRows, this->nColumns);
     for (int i=0; i<this->nRows; i++) {
         for (int j=0; j<this->nColumns; j++) {
@@ -90,8 +96,10 @@ Matrix* Matrix::ew_multiply(Matrix *matrix) {
 }
 
 Matrix* Matrix::ew_divide(Matrix *matrix) {
-    if (matrix->nRows != this->nRows || matrix->nColumns != this->nColumns)
+    if (matrix->nRows != this->nRows || matrix->nColumns != this->nColumns) {
+        qDebug() << "cannot do element wise operation";
         return nullptr;
+    }
     Matrix *new_matrix = new Matrix(this->nRows, this->nColumns);
     for (int i=0; i<this->nRows; i++) {
         for (int j=0; j<this->nColumns; j++) {
@@ -114,8 +122,10 @@ bool Matrix::compare(Matrix *matrix) {
 }
 
 Matrix* Matrix::dot_product(Matrix *matrix) {
-    if (this->nColumns != matrix->nRows)
+    if (this->nColumns != matrix->nRows) {
+        qDebug() << "dot product impossible";
         return nullptr;
+    }
     Matrix *mResult = new Matrix(this->nRows, matrix->nColumns);
     for (int i=0; i<this->nRows; i++) {
         for (int j=0; j<matrix->nColumns; j++) {
@@ -136,7 +146,7 @@ Matrix* Matrix::identity_multiply() {
     return mResult;
 }
 
-Matrix* Matrix::identity_matrix() { static
+Matrix* Matrix::identity_matrix() {
     Matrix *identity_matrix = new Matrix(4, 4);
     identity_matrix->matrice[0][0] = 1.0;
     identity_matrix->matrice[1][1] = 1.0;
@@ -146,9 +156,10 @@ Matrix* Matrix::identity_matrix() { static
 }
 
 Vector* Matrix::vector_multiply(Vector *vector) {
-    Matrix *mat = Matrix::from_vector(vector);
-    Matrix *dotted = this->dot_product(mat);
+    Matrix *vector_as_matrix = Matrix::from_vector(vector);
+    Matrix *dotted = this->dot_product(vector_as_matrix);
     Vector *vector_final = dotted->to_vector();
+    delete vector_as_matrix;
     delete dotted;
     return vector_final;
 }
@@ -157,7 +168,7 @@ Vector* Matrix::to_vector() {
     return new Vector(this->matrice[0][0], this->matrice[1][0], this->matrice[2][0], this->matrice[3][0]);
 }
 
-Matrix* Matrix::from_vector(Vector *vector) { static
+Matrix* Matrix::from_vector(Vector *vector) {
     Matrix *matrix = new Matrix(4, 1);
     matrix->matrice[0][0] = vector->fx;
     matrix->matrice[1][0] = vector->fy;
@@ -227,7 +238,7 @@ Matrix* Matrix::inverse() {
     return matrix;
 }
 
-Matrix* Matrix::translation(float fx, float fy, float fz) { static
+Matrix* Matrix::translation(float fx, float fy, float fz) {
     Matrix *matrix = new Matrix(4, 4);
     matrix->matrice = {
         {1.0, 0.0, 0.0, fx},
@@ -238,7 +249,7 @@ Matrix* Matrix::translation(float fx, float fy, float fz) { static
     return matrix;
 }
 
-Matrix* Matrix::scaling(float fx, float fy, float fz) { static
+Matrix* Matrix::scaling(float fx, float fy, float fz) {
     Matrix *matrix = new Matrix(4, 4);
     matrix->matrice = {
         {fx, 0.0, 0.0, 0.0},
@@ -249,7 +260,7 @@ Matrix* Matrix::scaling(float fx, float fy, float fz) { static
     return matrix;
 }
 
-Matrix* Matrix::rotate_x(float r) { static
+Matrix* Matrix::rotate_x(float r) {
     Matrix *matrix = new Matrix(4, 4);
     matrix->matrice = {
         {1.0, 0.0, 0.0, 0.0},
@@ -260,7 +271,7 @@ Matrix* Matrix::rotate_x(float r) { static
     return matrix;
 }
 
-Matrix* Matrix::rotate_y(float r) { static
+Matrix* Matrix::rotate_y(float r) {
     Matrix *matrix = new Matrix(4, 4);
     matrix->matrice = {
         {qCos(r), 0.0, qSin(r), 0.0},
@@ -272,7 +283,7 @@ Matrix* Matrix::rotate_y(float r) { static
 }
 
 
-Matrix* Matrix::rotate_z(float r) { static
+Matrix* Matrix::rotate_z(float r) {
     Matrix *matrix = new Matrix(4, 4);
     matrix->matrice = {
         {qCos(r), -qSin(r), 0.0, 0.0},
@@ -283,7 +294,7 @@ Matrix* Matrix::rotate_z(float r) { static
     return matrix;
 }
 
-Matrix* Matrix::shearing(float fxy, float fxz, float fyx, float fyz, float fzx, float fzy) { static
+Matrix* Matrix::shearing(float fxy, float fxz, float fyx, float fyz, float fzx, float fzy) {
     Matrix *matrix = new Matrix(4, 4);
     matrix->matrice = {
         {1.0, fxy, fxz, 0.0},
@@ -294,7 +305,7 @@ Matrix* Matrix::shearing(float fxy, float fxz, float fyx, float fyz, float fzx, 
     return matrix;
 }
 
-Matrix* Matrix::view_transformation(Vector *from, Vector *to, Vector *up) { static
+Matrix* Matrix::view_transformation(Vector *from, Vector *to, Vector *up) {
     Vector *abfoward = to->ew_subtract(from);
     Vector *foward = abfoward->normalize();
     delete abfoward;

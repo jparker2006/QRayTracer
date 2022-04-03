@@ -6,5 +6,6 @@ Bounds::Bounds(Vector *min, Vector *max) {
 }
 
 Bounds* Bounds::get_bounds(Body *body) {
-
+    Q_UNUSED(body);
+    return nullptr;
 }

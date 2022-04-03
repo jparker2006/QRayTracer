@@ -23,7 +23,7 @@ Group* Parser::parse_file(QString sFilePath) {
             vertices.push_back(new Vector(coords[1].toFloat(), coords[2].toFloat(), coords[3].toFloat(), 1.0));
         }
     }
-    Material *mat = new Material(new Vector(1, 0, 0, 0), 1, 1, 1, 1);
+    Material *mat = new Material(new Vector(0, 1, 1, 0), 1, 0.9, 0.9, 200);
     Group *group = new Group(mat);
     for (int i=0; i<lines.length(); i++) {
         if (lines[i].left(2) == "f ") {
@@ -40,13 +40,14 @@ Group* Parser::parse_file(QString sFilePath) {
             }
         }
     }
+    qDebug() << group->vChildren.size() << "triangles";
     qDebug() << "file loaded";
     return group;
 }
 
 QVector<Triangle *> Parser::fan_triangulation(QVector<Vector*> vertices, QList<QString> indices) {
     QVector<Triangle *> triangles = {};
-    Material *mat = new Material(new Vector(1, 0, 0, 0), 1, 1, 1, 1);
+    Material *mat = new Material(new Vector(0, 1, 1, 0), 1, 0.9, 0.9, 200);
     for (int i=2; i<vertices.length() - 1; i++) {
         Triangle *t = new Triangle(mat, vertices[indices[1].toInt()], vertices[indices[i].toInt()], vertices[indices[i + 1].toInt()]);
         triangles.push_back(t);

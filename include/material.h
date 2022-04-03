@@ -12,7 +12,7 @@ public:
     Vector *lighting(Light *light, Vector *point, Vector *eye, Vector *normal, bool bShadowed, Matrix *transformation);
     float fAmbient, fDiffuse, fSpecular, fShininess;
     Vector *color;
-    Pattern *pattern;
+    Pattern *pattern = nullptr;
     float fReflective = 0, fTransparency = 0, fRefractive_Index = 1;
 };
 

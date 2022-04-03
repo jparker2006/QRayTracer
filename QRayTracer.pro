@@ -23,7 +23,8 @@ SOURCES += \
     src/main.cpp \
     src/vector.cpp \
     src/world.cpp \
-    src/triangle.cpp
+    src/triangle.cpp \
+    src/thread.cpp
 HEADERS += \
     include/bounds.h \
     include/group.h \
@@ -46,7 +47,8 @@ HEADERS += \
     include/plane.h \
     include/pattern.h \
     include/triangle.h \
-    include/parser.h
+    include/parser.h \
+    include/thread.h
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
