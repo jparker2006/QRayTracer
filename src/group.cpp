@@ -11,6 +11,7 @@ QVector<Intersection *> Group::intersection(Body *body, Ray *ray) {
         Matrix *mInverse = body->vChildren[x]->transformation->inverse();
         curr_ray = curr_ray->transform(mInverse);
         delete mInverse;
+        curr_ray = curr_ray->transform(body->transformation->inverse());
         QVector<Intersection *> curr_xs = body->vChildren[x]->intersection(curr_ray);
         for (int y=0; y<curr_xs.length(); y++) {
             intersections.push_back(curr_xs[y]);

@@ -2,6 +2,8 @@ QT -= gui
 CONFIG += c++11 console
 CONFIG -= app_bundle
 SOURCES += \
+    src/bounds.cpp \
+    src/parser.cpp \
     src/group.cpp \
     src/cone.cpp \
     src/cylinder.cpp \
@@ -23,6 +25,7 @@ SOURCES += \
     src/world.cpp \
     src/triangle.cpp
 HEADERS += \
+    include/bounds.h \
     include/group.h \
     include/cone.h \
     include/cylinder.h \
@@ -42,7 +45,8 @@ HEADERS += \
     include/world.h \
     include/plane.h \
     include/pattern.h \
-    include/triangle.h
+    include/triangle.h \
+    include/parser.h
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target

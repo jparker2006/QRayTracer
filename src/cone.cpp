@@ -3,9 +3,6 @@
 Cone::Cone(Material *material): Body(material, Body::OBJ_TYPE::OBJ_CONE) {}
 
 QVector<Intersection *> Cone::intersection(Body *body, Ray *ray) {
-    Matrix *mInverse = body->transformation->inverse();
-    ray = ray->transform(mInverse);
-    delete mInverse;
     float fa = qPow(ray->direction->fx, 2) - qPow(ray->direction->fy, 2) + qPow(ray->direction->fz, 2);
     float fb = 2.0 * ray->origin->fx * ray->direction->fx - 2.0 * ray->origin->fy * ray->direction->fy+ 2.0 * ray->origin->fz * ray->direction->fz;
     float fc = qPow(ray->origin->fx, 2) - qPow(ray->origin->fy, 2) + qPow(ray->origin->fz, 2);

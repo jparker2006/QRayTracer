@@ -1,6 +1,5 @@
 ﻿/*
  TODO:
- groups
  bounding-boxes
  csg
  triangles
@@ -32,6 +31,7 @@
 #include "include/cone.h"
 #include "include/group.h"
 #include "include/triangle.h"
+#include "include/parser.h"
 
 float fEPSILON = 0.0001;
 
@@ -55,11 +55,10 @@ void render(Camera *camera, World *world) {
 
 int main(int argc, char *argv[]) {
     QCoreApplication application(argc, argv);
-
     long lStartTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 
-    Camera *cam = new Camera(200, 100, M_PI / 3.0, Matrix::identity_matrix());
-    Vector *from = new Vector(0, 2.5, -5, 1);
+    Camera *cam = new Camera(700, 700, M_PI / 3.0, Matrix::identity_matrix());
+    Vector *from = new Vector(0, 3, -3, 1);
     Vector *to = new Vector(0, 1, 0, 1);
     Vector *up = new Vector(0, 1, 0, 0);
     cam->transformation = Matrix::view_transformation(from, to, up);
@@ -71,6 +70,5 @@ int main(int argc, char *argv[]) {
 
     long lElapsedTime = QDateTime::currentDateTime().toMSecsSinceEpoch() - lStartTime;
     qDebug() << "rendering finished in" << lElapsedTime << "milliseconds";
-
     return 0;
 }

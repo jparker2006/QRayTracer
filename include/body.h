@@ -34,6 +34,9 @@ public:
     // group data
     Body *parent = nullptr;
     QVector<Body*> vChildren;
+
+    // triangle data
+    Vector *p0, *p1, *p2, *e0, *e1, *norm;
 };
 
 #endif // BODY_H

@@ -3,9 +3,6 @@
 Cylinder::Cylinder(Material *material): Body(material, Body::OBJ_TYPE::OBJ_CYLINDER) {}
 
 QVector<Intersection *> Cylinder::intersection(Body *body, Ray *ray) {
-    Matrix *mInverse = body->transformation->inverse();
-    ray = ray->transform(mInverse);
-    delete mInverse;
     float fa = qPow(ray->direction->fx, 2) + qPow(ray->direction->fz, 2);
     float fEPSILON = 0.0001;
     if (fa < fEPSILON)

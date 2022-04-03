@@ -12,9 +12,8 @@
 
 class Triangle: public Body {
 public:
-    Triangle(Material *material);
+    Triangle(Material *material, Vector *p0, Vector *p1, Vector *p2);
     static QVector<Intersection *> intersection(Body *body, Ray *ray);
-    static Vector *normal(Body *body, Vector *point);
 };
 
 #endif // TRIANGLE_H

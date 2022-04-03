@@ -14,21 +14,36 @@ Body::Body(Material *material, OBJ_TYPE type) {
 }
 
 QVector<Intersection *> Body::intersection(Ray *ray) {
+    Matrix *mInverse = this->transformation->inverse();
+    Ray *ray_t = ray->transform(mInverse);
+    delete mInverse;
     switch (this->type) {
+        case OBJ_TRIANGLE:
+            if (this->parent && OBJ_GROUP == this->parent->type)
+                return Triangle::intersection(this, ray);
+            return Triangle::intersection(this, ray_t);
         case OBJ_GROUP:
             return Group::intersection(this, ray);
         case OBJ_SPHERE:
-            return Sphere::intersection(this, ray);
+            if (this->parent && OBJ_GROUP == this->parent->type)
+                return Sphere::intersection(this, ray);
+            return Sphere::intersection(this, ray_t);
         case OBJ_PLANE:
-            return Plane::intersection(this, ray);
+            if (this->parent && OBJ_GROUP == this->parent->type)
+                return Plane::intersection(this, ray);
+            return Plane::intersection(this, ray_t);
         case OBJ_CUBE:
-            return Cube::intersection(this, ray);
+            if (this->parent && OBJ_GROUP == this->parent->type)
+                return Cube::intersection(this, ray);
+            return Cube::intersection(this, ray_t);
         case OBJ_CYLINDER:
-            return Cylinder::intersection(this, ray);
+            if (this->parent && OBJ_GROUP == this->parent->type)
+                return Cylinder::intersection(this, ray);
+            return Cylinder::intersection(this, ray_t);
         case OBJ_CONE:
-            return Cone::intersection(this, ray);
-        case OBJ_TRIANGLE:
-            return {};
+            if (this->parent && OBJ_GROUP == this->parent->type)
+                return Cone::intersection(this, ray);
+            return Cone::intersection(this, ray_t);
     }
     return {};
 }
@@ -38,28 +53,28 @@ Vector* Body::normal(Vector *point) {
     Vector *obj_point = mInverse->vector_multiply(point);
     delete mInverse;
     switch (this->type) {
+        case OBJ_TRIANGLE:
+            return this->norm;
         case OBJ_GROUP:
             return Group::normal(this, point);
         case OBJ_SPHERE:
-            if (OBJ_GROUP == this->parent->type)
+            if (this->parent && OBJ_GROUP == this->parent->type)
                 return Sphere::normal(this, point);
             return Sphere::normal(this, obj_point);
         case OBJ_PLANE:
             return new Vector(0, 1, 0, 0);
         case OBJ_CUBE:
-            if (OBJ_GROUP == this->parent->type)
+            if (this->parent && OBJ_GROUP == this->parent->type)
                 return Cube::normal(point);
             return Cube::normal(obj_point);
         case OBJ_CYLINDER:
-            if (OBJ_GROUP == this->parent->type)
+            if (this->parent && OBJ_GROUP == this->parent->type)
                 return Cylinder::normal(this, point);
             return Cylinder::normal(this, obj_point);
         case OBJ_CONE:
-            if (OBJ_GROUP == this->parent->type)
+            if (this->parent && OBJ_GROUP == this->parent->type)
                 return Cone::normal(this, point);
             return Cone::normal(this, obj_point);
-        case OBJ_TRIANGLE:
-            return new Vector(0, 0, 0, 0);
     }
     return new Vector(0, 0, 0, 0);
 }

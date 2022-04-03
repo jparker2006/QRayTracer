@@ -15,9 +15,6 @@ Vector* Cube::normal(Vector *point) {
 }
 
 QVector<Intersection *> Cube::intersection(Body *body, Ray *ray) {
-    Matrix *mInverse = body->transformation->inverse();
-    ray = ray->transform(mInverse);
-    delete mInverse;
     QVector<float> v_xt = Cube::check_axis(ray->origin->fx, ray->direction->fx);
     QVector<float> v_yt = Cube::check_axis(ray->origin->fy, ray->direction->fy);
     QVector<float> v_zt = Cube::check_axis(ray->origin->fz, ray->direction->fz);

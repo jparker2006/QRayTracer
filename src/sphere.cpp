@@ -4,9 +4,6 @@
 Sphere::Sphere(Material *material): Body(material, Body::OBJ_TYPE::OBJ_SPHERE) {}
 
 QVector<Intersection *> Sphere::intersection(Body *body, Ray *ray) {
-    Matrix *mInverse = body->transformation->inverse();
-    ray = ray->transform(mInverse);
-    delete mInverse;
     Vector *sphere_to_ray = ray->origin->ew_subtract(new Vector(0, 0, 0, 1));
     float fa = ray->direction->dot_product(ray->direction);
     float fb = 2.0 * ray->direction->dot_product(sphere_to_ray);
