@@ -10,11 +10,11 @@
 class Canvas {
 public:
     Canvas(int nWidth, int nHeight);
-    void write_pixel(int x, int y, Vector *color);
     Vector *get_pixel(int x, int y);
     void write_ppm();
     int nWidth, nHeight;
     QVector<QVector<Vector*>> aPixels = {};
+    void write_pixel(int x, int y, Vector *color, float nSamples);
 };
 
 #endif // CANVAS_H

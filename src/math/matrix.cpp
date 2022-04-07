@@ -197,15 +197,13 @@ Matrix* Matrix::from_vector(Vector *vector) {
 }
 
 Matrix* Matrix::transpose() {
-    QVector<QVector<float>> matrice = {};
-    for (int i=0; i<this->nRows; i++) {
-        QVector<float> curr_row = {};
-        for (int j=0; j<this->nColumns; j++) {
-            curr_row.push_back(this->matrice[j][i]);
+    Matrix *transposed = new Matrix(this->nColumns, this->nRows);
+    for (int i=0; i<this->nColumns; i++) {
+        for (int j=0; j<this->nRows; j++) {
+            transposed->matrice[i][j] = this->matrice[j][i];
         }
-        this->matrice.push_back(curr_row);
     }
-    return new Matrix(this->nColumns, this->nRows, matrice);
+    return transposed;
 }
 
 float Matrix::determinant() {

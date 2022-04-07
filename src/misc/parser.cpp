@@ -16,12 +16,28 @@ QVector<Body*> Parser::parse_file(QString sFilePath, Material *mat) {
             nRemoved++;
         }
     }
-//    qDebug() << nRemoved << "lines truncated by parser";
+
+    float fxMin = Q_INFINITY;
+    float fxMax = -Q_INFINITY;
+    float fyMin = Q_INFINITY;
+    float fyMax = -Q_INFINITY;
+    float fzMin = Q_INFINITY;
+    float fzMax = -Q_INFINITY;
+
     QVector<Vector*> vertices = { nullptr }; // null makes it 1 based
     for (int i=0; i<lines.length(); i++) {
         if (lines[i].left(2) == "v ") {
             QList<QString> coords = lines[i].split(" ");
-            vertices.push_back(new Vector(coords[1].toFloat(), coords[2].toFloat(), coords[3].toFloat(), 1.0));
+            float fx = coords[1].toFloat();
+            float fy = coords[2].toFloat();
+            float fz = coords[3].toFloat();
+            if (fx < fxMin) fxMin = fx;
+            if (fx > fxMax) fxMax = fx;
+            if (fy < fyMin) fyMin = fy;
+            if (fy > fyMax) fyMax = fy;
+            if (fz < fzMin) fzMin = fz;
+            if (fz > fzMax) fzMax = fz;
+            vertices.push_back(new Vector(fx, fy, fz, 1.0));
         }
     }
     QVector<Vector*> normals = { nullptr };
@@ -82,7 +98,14 @@ QVector<Body*> Parser::parse_file(QString sFilePath, Material *mat) {
             }
         }
     }
-    qDebug() << group.length() << "triangles";
+//    qDebug() << group.length() << "triangles";
+
+
+    Vector *vMin = new Vector(fxMin, fyMin, fzMin, 1);
+    Vector *vMax = new Vector(fxMax, fyMax, fzMax, 1);
+//    qDebug() << "min:" << vMin->stringify();
+//    qDebug() << "max:" << vMax->stringify();
+
     return group;
 }
 

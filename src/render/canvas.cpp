@@ -13,7 +13,9 @@ Canvas::Canvas(int nWidth, int nHeight) {
     }
 }
 
-void Canvas::write_pixel(int x, int y, Vector *color) {
+void Canvas::write_pixel(int x, int y, Vector *color, float nSamples) {
+    float fScale = 1.0 / nSamples;
+    color = color->scalar_multiply(fScale);
     this->aPixels[x][y] = color;
 }
 

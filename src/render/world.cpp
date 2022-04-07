@@ -7,41 +7,20 @@ World::World() {
 
 QVector<Intersection *> World::intersect_world(Ray *ray) {
     QVector<Intersection *> intersections = {};
-    Ray *rTransformed = ray->transform(this->objects[0]->mInverse);
-    for (int i=0; i<this->objects.size() - 1; i++) {
+    for (int i=0; i<this->objects.size(); i++) {
+        Ray *rTransformed;
+        if (this->objects[i]->bTransformed)
+            rTransformed = ray->transform(this->objects[i]->mInverse);
+        else
+            rTransformed = new Ray(ray->origin->clone(), ray->direction->clone());
         QVector<Intersection *> curr_intersections = this->objects[i]->intersection(rTransformed);
         for (int j=0; j<curr_intersections.length(); j++) {
             intersections.push_back(curr_intersections[j]);
         }
+        rTransformed->free_ray();
     }
-    rTransformed->free_ray();
-    rTransformed = ray->transform(this->objects[this->objects.size()-1]->mInverse);
-    QVector<Intersection *> xs = this->objects[this->objects.size()-1]->intersection(rTransformed);
-    for (int j=0; j<xs.length(); j++) {
-        intersections.push_back(xs[j]);
-    }
-    rTransformed->free_ray();
     return intersections;
 }
-
-
-
-//QVector<Intersection *> World::intersect_world(Ray *ray) {
-//    QVector<Intersection *> intersections = {};
-//    for (int i=0; i<this->objects.size(); i++) {
-//        Ray *rTransformed;
-//        if (this->objects[i]->bTransformed)
-//            rTransformed = ray->transform(this->objects[i]->transformation);
-//        else
-//            rTransformed = new Ray(ray->origin->clone(), ray->direction->clone());
-//        QVector<Intersection *> curr_intersections = this->objects[i]->intersection(rTransformed);
-//        for (int j=0; j<curr_intersections.length(); j++) {
-//            intersections.push_back(curr_intersections[j]);
-//        }
-//        rTransformed->free_ray();
-//    }
-//    return intersections;
-//}
 
 Vector* World::shade_hit(Computation *comp, int nRemaining) {
     bool shadowed = check_shadowed(comp->over_point);

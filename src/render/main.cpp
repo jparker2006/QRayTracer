@@ -2,8 +2,6 @@
  TODO:
  bounding-boxes
  csg
- obj parser
- anti aliasing
  soft shadows
  blur
  multithreading
@@ -11,6 +9,7 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include <QDateTime>
+#include <random>
 
 #include "include/math/vector.h"
 #include "include/render/canvas.h"
@@ -35,6 +34,7 @@
 #include "include/misc/parser.h"
 #include "include/misc/thread.h"
 
+
 //int main(int argc, char *argv[]) {
 //    QCoreApplication application(argc, argv);
 //    QMutex *mutex = new QMutex();
@@ -49,13 +49,27 @@
 //    return application.exec();
 //}
 
+
+inline double random_double() {
+    static std::uniform_real_distribution<double> distribution(0.0, 1.0);
+    static std::mt19937 generator;
+    return distribution(generator);
+}
+
+int nSamplesPerPixel = 10;
+int nRayBounces = 1;
 void render(Camera *camera, World *world) {
     Canvas *image = new Canvas(camera->fhsize, camera->fvsize);
     for (int y=0; y<camera->fvsize; y++) {
         for (int x=0; x<camera->fhsize; x++) {
-            Ray *ray = camera->ray_for_pixel(x, y);
-            Vector *color = world->color_at(ray, 4);
-            image->write_pixel(x, y, color);
+            Vector *color = new Vector(0, 0, 0, 0);
+            for (int z=0; z<nSamplesPerPixel; z++) {
+                auto u = x + random_double();
+                auto v = y + random_double();
+                Ray *ray = camera->ray_for_pixel(u, v);
+                color = color->ew_add(world->color_at(ray, nRayBounces));
+            }
+            image->write_pixel(x, y, color, nSamplesPerPixel);
         }
         qDebug() << (y / camera->fvsize) * 100.0 << "%";
     }
@@ -66,37 +80,39 @@ int main(int argc, char *argv[]) {
     QCoreApplication application(argc, argv);
     long lStartTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 
-    float fMULT = 10;
-    float fWIDTH = 192 * fMULT;
-    float fHEIGHT = 108 * fMULT;
-    Camera *cam = new Camera(qRound(fWIDTH), qRound(fHEIGHT), M_PI / 3, Matrix::identity_matrix());
-    Vector *from = new Vector(0, 3.6, -7.0, 1);
-    Vector *to = new Vector(0, 1, 0, 1);
+    int nWIDTH = 1920 / 4;
+    int nHEIGHT = 1080 / 4;
+    Camera *cam = new Camera(nWIDTH, nHEIGHT, M_PI / 4.0, Matrix::identity_matrix());
+    Vector *from = new Vector(-3, 1, 2.5, 1);
+    Vector *to = new Vector(0, 0.5, 0, 1);
     Vector *up = new Vector(0, 1, 0, 0);
     cam->transformation = Matrix::view_transformation(from, to, up);
 
     World *world = new World();
-    world->light = new Light(white, new Vector(-10, 10, -10, 1));
+    world->light = new Light(new Vector(1.55, 1.55, 1.55, 0), new Vector(-1, 2, 4, 1));
 
-    Parser *parser = new Parser();
-    QString sFile = "/home/jparker/Desktop/dragon.obj";
-    Material *mat = new Material(Vector::from_rgb(128,128,128), 0.1, 0.9, 0.9, 200);
-    QVector<Body*> g = parser->parse_file(sFile, mat);
-    for (int i=0; i<g.size(); i++) {
-        world->push(g[i]);
-    }
+    Material *plane_mat = new Material(white, 0.025, 0.67, 0, 0);
+    Plane *plane = new Plane(plane_mat);
+    Material *sp_mat_r = new Material(red, 0.1, 0.6, 0, 0);
+    Material *sp_mat_b = new Material(new Vector(0.5, 0.5, 1.0, 0), 0.1, 0.6, 0, 0);
 
-    world->objects[0]->transform(Matrix::translation(0, -1.7, 1.2));
+    Sphere *red_sphere = new Sphere(sp_mat_r);
+    red_sphere->transform(Matrix::translation(0.5, 0.5, 0));
+    red_sphere->transform(Matrix::scaling(0.5, 0.5, 0.5));
 
-    Plane *plane = new Plane(new Material(Vector::from_rgb(34,139,34), 0.1, 0.9, 0.9, 200));
-    plane->transform(Matrix::translation(0, -1.7, 0));
+    Sphere *blue_sphere = new Sphere(sp_mat_b);
+    blue_sphere->transform(Matrix::translation(-0.25, 0.33, 0));
+    blue_sphere->transform(Matrix::scaling(0.33, 0.33, 0.33));
+
+    world->push(red_sphere);
+    world->push(blue_sphere);
     world->push(plane);
 
     render(cam, world);
 
     long lElapsedTime = QDateTime::currentDateTime().toMSecsSinceEpoch() - lStartTime;
     qDebug() << "rendering finished in" << lElapsedTime << "milliseconds";
-    qDebug() << (fWIDTH * fHEIGHT) << "pixels rendered";
-    qDebug() << ((float)(fWIDTH * fHEIGHT) / (float)(lElapsedTime)) << "px / ms";
+    qDebug() << (nWIDTH * nHEIGHT) << "pixels rendered";
+    qDebug() << ((float)(nWIDTH * nHEIGHT) / (float)(lElapsedTime)) << "px / ms";
     return 0;
 }

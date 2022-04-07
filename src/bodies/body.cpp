@@ -28,9 +28,6 @@ QVector<Intersection *> Body::intersection(Ray *ray) {
         case OBJ_PLANE: {
             return Plane::intersection(this, ray);
         }
-//        case OBJ_GROUP: {
-//            return Group::intersection(this, ray);
-//        }
         case OBJ_SPHERE: {
             return Sphere::intersection(this, ray);
         }
@@ -50,22 +47,27 @@ QVector<Intersection *> Body::intersection(Ray *ray) {
 Vector* Body::normal(Vector *point, Intersection *hit) {
     point = this->mInverse->vector_multiply(point);
     switch (this->type) {
-        case OBJ_SMOOTH_TRIANGLE:
+        case OBJ_SMOOTH_TRIANGLE: {
             return SmoothTriangle::normal(this, point, hit);
-        case OBJ_TRIANGLE:
+        }
+        case OBJ_TRIANGLE: {
             return this->n0;
-//        case OBJ_GROUP:
-//            return Group::normal(this, point);
-        case OBJ_SPHERE:
+        }
+        case OBJ_SPHERE: {
             return Sphere::normal(this, point);
-        case OBJ_PLANE:
+        }
+        case OBJ_PLANE: {
             return new Vector(0, 1, 0, 0);
-        case OBJ_CUBE:
+        }
+        case OBJ_CUBE: {
             return Cube::normal(point);
-        case OBJ_CYLINDER:
+        }
+        case OBJ_CYLINDER: {
             return Cylinder::normal(this, point);
-        case OBJ_CONE:
+        }
+        case OBJ_CONE: {
             return Cone::normal(this, point);
+        }
     }
     return new Vector(0, 0, 0, 0);
 }
