@@ -5,7 +5,7 @@ SOURCES += \
     src/bodies/smoothtriangle.cpp \
     src/misc/bounds.cpp \
     src/misc/parser.cpp \
-    src/bodies/group.cpp \
+#    src/bodies/group.cpp \
     src/bodies/cone.cpp \
     src/bodies/cylinder.cpp \
     src/bodies/cube.cpp \
@@ -28,7 +28,7 @@ SOURCES += \
     src/misc/thread.cpp
 HEADERS += \
     include/misc/bounds.h \
-    include/bodies/group.h \
+#    include/bodies/group.h \
     include/bodies/cone.h \
     include/bodies/cylinder.h \
     include/bodies/cube.h \

@@ -51,4 +51,12 @@ Computation* Computation::prepare_computations(Ray *ray, Body* body, Intersectio
     return computations;
 }
 
-
+void Computation::free_computation() {
+    delete this->point;
+    delete this->over_point;
+    delete this->under_point;
+    delete this->eye;
+    delete this->normal;
+    delete this->reflect;
+    delete this;
+}

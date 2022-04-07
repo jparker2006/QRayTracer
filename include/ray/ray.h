@@ -10,6 +10,7 @@ public:
     Vector *position(float ft);
     Vector *origin, *direction;
     Ray *transform(Matrix *matrix);
+    void free_ray();
 };
 
 #endif // RAY_H

@@ -15,3 +15,9 @@ Vector* Ray::position(float ft) {
 Ray* Ray::transform(Matrix *matrix) {
     return new Ray(matrix->vector_multiply(this->origin), matrix->vector_multiply(this->direction));
 }
+
+void Ray::free_ray() {
+    delete this->origin;
+    delete this->direction;
+    delete this;
+}

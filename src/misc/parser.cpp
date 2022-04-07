@@ -36,7 +36,7 @@ QVector<Body*> Parser::parse_file(QString sFilePath, Material *mat) {
         if (lines[i].left(2) == "f ") {
             if (!lines[i].contains("/")) {
                 QList<QString> indices = lines[i].split(" ");
-                if (indices.size() != 4) { // polygon
+                if (indices.size() != 4) { // fan_triangulation
                     QVector<Triangle *> triangles = this->fan_triangulation(vertices, indices);
                     for (int x=0; x<triangles.length(); x++) {
                         group.push_back(triangles[x]);
@@ -49,9 +49,9 @@ QVector<Body*> Parser::parse_file(QString sFilePath, Material *mat) {
             }
             else {
                 QList<QString> split_line = lines[i].split(" ");
-                QList<QString> v_indices = {};
-                QList<QString> n_indices = {};
-                if ('/' == split_line[1][2]) { // "x//x" case
+                QList<QString> v_indices = { nullptr };
+                QList<QString> n_indices = { nullptr };
+                if (split_line[1].contains("//")) { // "x//x" case
                     for (int j=1; j<split_line.length(); j++) {
                         QList<QString> pair = split_line[j].split("//");
                         v_indices.push_back(pair[0]);
@@ -65,15 +65,24 @@ QVector<Body*> Parser::parse_file(QString sFilePath, Material *mat) {
                         n_indices.push_back(pair[2]);
                     }
                 }
-                SmoothTriangle *triangle = new SmoothTriangle(
-                    mat,
-                    vertices[v_indices[0].toInt()], vertices[v_indices[1].toInt()], vertices[v_indices[2].toInt()],
-                    normals[n_indices[0].toInt()], normals[n_indices[1].toInt()], normals[n_indices[2].toInt()]
-                );
-                group.push_back(triangle);
+                if (split_line.size() > 4) { // fan_triangulation
+                    QVector<SmoothTriangle *> triangles = this->fan_smooth_triangulation(vertices, normals, v_indices, n_indices);
+                    for (int x=0; x<triangles.length(); x++) {
+                        group.push_back(triangles[x]);
+                    }
+                }
+                else {
+                    SmoothTriangle *triangle = new SmoothTriangle(
+                        mat,
+                        vertices[v_indices[1].toInt()], vertices[v_indices[2].toInt()], vertices[v_indices[3].toInt()],
+                        normals[n_indices[1].toInt()], normals[n_indices[2].toInt()], normals[n_indices[3].toInt()]
+                    );
+                    group.push_back(triangle);
+                }
             }
         }
     }
+    qDebug() << group.length() << "triangles";
     return group;
 }
 
@@ -86,9 +95,9 @@ QVector<Triangle *> Parser::fan_triangulation(QVector<Vector*> vertices, QList<Q
     return triangles;
 }
 
-QVector<SmoothTriangle *> Parser::fan_smooth_triangulation(QVector<Vector *> vertices, QVector<Vector *> normals, QList<QString> v_indices, QList<QString> n_indices) { // dont think ill need this
+QVector<SmoothTriangle *> Parser::fan_smooth_triangulation(QVector<Vector *> vertices, QVector<Vector *> normals, QList<QString> v_indices, QList<QString> n_indices) {
     QVector<SmoothTriangle *> triangles = {};
-    for (int i=2; i<vertices.length() - 1; i++) {
+    for (int i=2; i<v_indices.length() - 1; i++) {
         SmoothTriangle *t = new SmoothTriangle(
                 this->mat,
                 vertices[v_indices[1].toInt()], vertices[v_indices[i].toInt()], vertices[v_indices[i + 1].toInt()],

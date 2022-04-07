@@ -14,6 +14,7 @@ public:
     Body *object;
     bool bInside;
     float n1, n2;
+    void free_computation();
 };
 
 #endif // COMPUTATION_H

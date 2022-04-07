@@ -22,7 +22,8 @@ public:
     Body(Material *material, OBJ_TYPE type);
     QVector<Intersection *> intersection(Ray *ray);
     Vector *normal(Vector *point, Intersection *hit);
-    Matrix *transformation = new Matrix(4, 4);
+    Matrix *transformation;
+    bool bTransformed = false;
     void transform(Matrix *matrix);
     Material *material;
     int index;
@@ -34,8 +35,8 @@ public:
     bool bClosed = false;
 
     // group data
-    Body *parent = nullptr;
-    QVector<Body*> vChildren;
+//    Body *parent = nullptr;
+//    QVector<Body*> vChildren;
 
     // triangle data
     Vector *p0, *p1, *p2, *e0, *e1, *n0, *n1, *n2;

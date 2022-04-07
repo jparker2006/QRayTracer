@@ -89,6 +89,10 @@ Vector* Vector::from_rgb(float r, float g, float b) {
     return new Vector(r / 255.0, g / 255.0, b / 255.0, 0);
 }
 
+Vector* Vector::clone() {
+    return new Vector(this->fx, this->fy, this->fz, this->fw);
+}
+
 QString Vector::stringify() {
     QString sVec = "";
     sVec += "{ x: " + QString::number(this->fx);

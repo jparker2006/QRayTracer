@@ -8,6 +8,7 @@
 class Matrix {
 public:
     Matrix(int nRows, int nColumns);
+    Matrix(int nRows, int nColumns, QVector<QVector<float> > matrice_data);
     Matrix *scalar_add(float s);
     Matrix *scalar_subtract(float s);
     Matrix *scalar_multiply(float s);

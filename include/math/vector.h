@@ -25,6 +25,7 @@ public:
     Vector *reflect(Vector *normal);
     QString stringify();
     static Vector *from_rgb(float r, float g, float b);
+    Vector *clone();
 };
 
 #endif // VECTOR_H

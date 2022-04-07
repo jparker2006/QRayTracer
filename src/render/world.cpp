@@ -7,15 +7,43 @@ World::World() {
 
 QVector<Intersection *> World::intersect_world(Ray *ray) {
     QVector<Intersection *> intersections = {};
-    for (int i=0; i<this->objects.size(); i++) {
-        QVector<Intersection *> curr_intersections = this->objects[i]->intersection(ray);
-        for (int j=0; j<curr_intersections.length(); j++)
+    Ray *rTransformed = ray->transform(this->objects[0]->mInverse);
+    for (int i=0; i<this->objects.size() - 1; i++) {
+        QVector<Intersection *> curr_intersections = this->objects[i]->intersection(rTransformed);
+        for (int j=0; j<curr_intersections.length(); j++) {
             intersections.push_back(curr_intersections[j]);
+        }
     }
+    rTransformed->free_ray();
+    rTransformed = ray->transform(this->objects[this->objects.size()-1]->mInverse);
+    QVector<Intersection *> xs = this->objects[this->objects.size()-1]->intersection(rTransformed);
+    for (int j=0; j<xs.length(); j++) {
+        intersections.push_back(xs[j]);
+    }
+    rTransformed->free_ray();
     return intersections;
 }
 
-Vector* World::shade_hit(Computation *comp, int nRemaining) { // mem optimize l8r
+
+
+//QVector<Intersection *> World::intersect_world(Ray *ray) {
+//    QVector<Intersection *> intersections = {};
+//    for (int i=0; i<this->objects.size(); i++) {
+//        Ray *rTransformed;
+//        if (this->objects[i]->bTransformed)
+//            rTransformed = ray->transform(this->objects[i]->transformation);
+//        else
+//            rTransformed = new Ray(ray->origin->clone(), ray->direction->clone());
+//        QVector<Intersection *> curr_intersections = this->objects[i]->intersection(rTransformed);
+//        for (int j=0; j<curr_intersections.length(); j++) {
+//            intersections.push_back(curr_intersections[j]);
+//        }
+//        rTransformed->free_ray();
+//    }
+//    return intersections;
+//}
+
+Vector* World::shade_hit(Computation *comp, int nRemaining) {
     bool shadowed = check_shadowed(comp->over_point);
     Vector *vSurface = comp->object->material->lighting(this->light, comp->over_point, comp->eye, comp->normal, shadowed, comp->object->transformation);
     Vector *vReflected = this->reflected_color(comp, nRemaining);
@@ -25,15 +53,7 @@ Vector* World::shade_hit(Computation *comp, int nRemaining) { // mem optimize l8
         vReflected = vReflected->scalar_multiply(reflectance);
         vRefracted = vRefracted->scalar_multiply(1.0 - reflectance);
     }
-
-    delete comp->point;
-    delete comp->over_point;
-    delete comp->under_point;
-    delete comp->eye;
-    delete comp->normal;
-    delete comp->reflect;
-    delete comp;
-
+    comp->free_computation(); // giving reflection stuff error (deleted then recurse)
     Vector *color = vSurface->ew_add(vReflected->ew_add(vRefracted));
     delete vSurface;
     delete vReflected;
@@ -48,6 +68,7 @@ Vector* World::color_at(Ray *ray, int nRemaining) {
         return new Vector(0, 0, 0, 0);
     Computation *comp = Computation::prepare_computations(ray, this->objects[intersection->index], intersection, intersections, this->objects);
     delete intersection;
+    ray->free_ray();
     return shade_hit(comp, nRemaining);
 }
 
@@ -86,7 +107,6 @@ bool World::check_shadowed(Vector *point) {
     delete v;
     Ray *ray = new Ray(point, direction);
     QVector<Intersection *> intersections = this->intersect_world(ray);
-    delete ray;
     for (int i=0; i<intersections.length(); i++) {
         if (intersections[i]->ft > 0.0 && intersections[i]->ft < fDistance)
             return true;

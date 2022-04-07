@@ -13,44 +13,59 @@ Matrix::Matrix(int nRows, int nColumns) {
     }
 }
 
+// optimize this class with this
+Matrix::Matrix(int nRows, int nColumns, QVector<QVector<float>> matrice_data) {
+    this->nRows = nRows;
+    this->nColumns = nColumns;
+    this->matrice = matrice_data;
+}
+
 Matrix* Matrix::scalar_add(float s) {
-    Matrix *matrix = new Matrix(this->nRows, this->nColumns);
-    for (int i=0; i<this->matrice.length(); i++) {
-        for (int j=0; j<matrice[i].length(); j++) {
-            matrix->matrice[i][j] = this->matrice[i][j] + s;
+    QVector<QVector<float>> matrix = {};
+    for (int i=0; i<this->nRows; i++) {
+        QVector<float> curr_row = {};
+        for (int j=0; j<this->nColumns; j++) {
+            curr_row.push_back(this->matrice[i][j] + s);
         }
+        this->matrice.push_back(curr_row);
     }
-    return matrix;
+    return new Matrix(this->nRows, this->nColumns, matrix);
 }
 
 Matrix* Matrix::scalar_subtract(float s) {
-    Matrix *matrix = new Matrix(this->nRows, this->nColumns);
-    for (int i=0; i<this->matrice.length(); i++) {
-        for (int j=0; j<matrice[i].length(); j++) {
-            matrix->matrice[i][j] = this->matrice[i][j] - s;
+    QVector<QVector<float>> matrix = {};
+    for (int i=0; i<this->nRows; i++) {
+        QVector<float> curr_row = {};
+        for (int j=0; j<this->nColumns; j++) {
+            curr_row.push_back(this->matrice[i][j] - s);
         }
+        this->matrice.push_back(curr_row);
     }
-    return matrix;
+    return new Matrix(this->nRows, this->nColumns, matrix);
 }
 
 Matrix* Matrix::scalar_multiply(float s) {
-    Matrix *matrix = new Matrix(this->nRows, this->nColumns);
-    for (int i=0; i<this->matrice.length(); i++) {
-        for (int j=0; j<matrice[i].length(); j++) {
-            matrix->matrice[i][j] = this->matrice[i][j] * s;
+    QVector<QVector<float>> matrix = {};
+    for (int i=0; i<this->nRows; i++) {
+        QVector<float> curr_row = {};
+        for (int j=0; j<this->nColumns; j++) {
+            curr_row.push_back(this->matrice[i][j] * s);
         }
+        this->matrice.push_back(curr_row);
     }
-    return matrix;
+    return new Matrix(this->nRows, this->nColumns, matrix);
 }
 
 Matrix* Matrix::scalar_divide(float s) {
-    Matrix *matrix = new Matrix(this->nRows, this->nColumns);
-    for (int i=0; i<this->matrice.length(); i++) {
-        for (int j=0; j<matrice[i].length(); j++) {
-            matrix->matrice[i][j] = this->matrice[i][j] / s;
+    QVector<QVector<float>> matrix = {};
+    for (int i=0; i<this->nRows; i++) {
+        QVector<float> curr_row = {};
+        for (int j=0; j<this->nColumns; j++) {
+            curr_row.push_back(this->matrice[i][j] / s);
         }
+        this->matrice.push_back(curr_row);
     }
-    return matrix;
+    return new Matrix(this->nRows, this->nColumns, matrix);
 }
 
 Matrix* Matrix::ew_add(Matrix *matrix) {
@@ -58,13 +73,15 @@ Matrix* Matrix::ew_add(Matrix *matrix) {
         qDebug() << "cannot do element wise operation";
         return nullptr;
     }
-    Matrix *new_matrix = new Matrix(this->nRows, this->nColumns);
+    QVector<QVector<float>> matrice = {};
     for (int i=0; i<this->nRows; i++) {
+        QVector<float> curr_row = {};
         for (int j=0; j<this->nColumns; j++) {
-            new_matrix->matrice[i][j] = this->matrice[i][j] + matrix->matrice[i][j];
+            curr_row.push_back(this->matrice[i][j] + matrix->matrice[i][j]);
         }
+        this->matrice.push_back(curr_row);
     }
-    return new_matrix;
+    return new Matrix(this->nRows, this->nColumns, matrice);
 }
 
 Matrix* Matrix::ew_subtract(Matrix *matrix) {
@@ -72,13 +89,15 @@ Matrix* Matrix::ew_subtract(Matrix *matrix) {
         qDebug() << "cannot do element wise operation";
         return nullptr;
     }
-    Matrix *new_matrix = new Matrix(this->nRows, this->nColumns);
+    QVector<QVector<float>> matrice = {};
     for (int i=0; i<this->nRows; i++) {
+        QVector<float> curr_row = {};
         for (int j=0; j<this->nColumns; j++) {
-            new_matrix->matrice[i][j] = this->matrice[i][j] - matrix->matrice[i][j];
+            curr_row.push_back(this->matrice[i][j] - matrix->matrice[i][j]);
         }
+        this->matrice.push_back(curr_row);
     }
-    return new_matrix;
+    return new Matrix(this->nRows, this->nColumns, matrice);
 }
 
 Matrix* Matrix::ew_multiply(Matrix *matrix) {
@@ -86,27 +105,27 @@ Matrix* Matrix::ew_multiply(Matrix *matrix) {
         qDebug() << "cannot do element wise operation";
         return nullptr;
     }
-    Matrix *new_matrix = new Matrix(this->nRows, this->nColumns);
+    QVector<QVector<float>> matrice = {};
     for (int i=0; i<this->nRows; i++) {
+        QVector<float> curr_row = {};
         for (int j=0; j<this->nColumns; j++) {
-            new_matrix->matrice[i][j] = this->matrice[i][j] * matrix->matrice[i][j];
+            curr_row.push_back(this->matrice[i][j] * matrix->matrice[i][j]);
         }
+        this->matrice.push_back(curr_row);
     }
-    return new_matrix;
+    return new Matrix(this->nRows, this->nColumns, matrice);
 }
 
 Matrix* Matrix::ew_divide(Matrix *matrix) {
-    if (matrix->nRows != this->nRows || matrix->nColumns != this->nColumns) {
-        qDebug() << "cannot do element wise operation";
-        return nullptr;
-    }
-    Matrix *new_matrix = new Matrix(this->nRows, this->nColumns);
+    QVector<QVector<float>> matrice = {};
     for (int i=0; i<this->nRows; i++) {
+        QVector<float> curr_row = {};
         for (int j=0; j<this->nColumns; j++) {
-            new_matrix->matrice[i][j] = this->matrice[i][j] / matrix->matrice[i][j];
+            curr_row.push_back(this->matrice[i][j] / matrix->matrice[i][j]);
         }
+        this->matrice.push_back(curr_row);
     }
-    return new_matrix;
+    return new Matrix(this->nRows, this->nColumns, matrice);
 }
 
 bool Matrix::compare(Matrix *matrix) {
@@ -155,7 +174,7 @@ Matrix* Matrix::identity_matrix() {
     return identity_matrix;
 }
 
-Vector* Matrix::vector_multiply(Vector *vector) {
+Vector* Matrix::vector_multiply(Vector *vector) { // look at optimizing this
     Matrix *vector_as_matrix = Matrix::from_vector(vector);
     Matrix *dotted = this->dot_product(vector_as_matrix);
     Vector *vector_final = dotted->to_vector();
@@ -178,13 +197,15 @@ Matrix* Matrix::from_vector(Vector *vector) {
 }
 
 Matrix* Matrix::transpose() {
-    Matrix *transposed = new Matrix(this->nColumns, this->nRows);
-    for (int i=0; i<this->nColumns; i++) {
-        for (int j=0; j<this->nRows; j++) {
-            transposed->matrice[i][j] = this->matrice[j][i];
+    QVector<QVector<float>> matrice = {};
+    for (int i=0; i<this->nRows; i++) {
+        QVector<float> curr_row = {};
+        for (int j=0; j<this->nColumns; j++) {
+            curr_row.push_back(this->matrice[j][i]);
         }
+        this->matrice.push_back(curr_row);
     }
-    return transposed;
+    return new Matrix(this->nColumns, this->nRows, matrice);
 }
 
 float Matrix::determinant() {
@@ -198,14 +219,12 @@ float Matrix::determinant() {
 }
 
 Matrix* Matrix::submatrix(int nRow, int nCol) {
-    Matrix *matrix = new Matrix(this->nRows - 1, this->nColumns - 1);
     QVector<QVector<float>> matrice = this->matrice;
     matrice.removeAt(nRow);
     for (int i=0; i<this->nRows - 1; i++) {
         matrice[i].removeAt(nCol);
     }
-    matrix->matrice = matrice;
-    return matrix;
+    return new Matrix(this->nRows - 1, this->nColumns - 1, matrice);
 }
 
 float Matrix::minor(int nRow, int nCol) {
@@ -222,7 +241,7 @@ float Matrix::cofactor(int nRow, int nCol) {
     return -fMinor;
 }
 
-Matrix* Matrix::inverse() {
+Matrix* Matrix::inverse() { // look at refactoring
     float fDeterminant = this->determinant();
     if (0 == fDeterminant) {
         qDebug() << "cant be inverted";

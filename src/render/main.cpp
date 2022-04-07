@@ -54,9 +54,8 @@ void render(Camera *camera, World *world) {
     for (int y=0; y<camera->fvsize; y++) {
         for (int x=0; x<camera->fhsize; x++) {
             Ray *ray = camera->ray_for_pixel(x, y);
-            Vector *color = world->color_at(ray, 2);
+            Vector *color = world->color_at(ray, 4);
             image->write_pixel(x, y, color);
-            delete ray;
         }
         qDebug() << (y / camera->fvsize) * 100.0 << "%";
     }
@@ -67,11 +66,11 @@ int main(int argc, char *argv[]) {
     QCoreApplication application(argc, argv);
     long lStartTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 
-    float fMULT = 1;
-    float fWIDTH = 125 * fMULT;
-    float fHEIGHT = 125 * fMULT;
-    Camera *cam = new Camera(fWIDTH, fHEIGHT, M_PI / 2.5, Matrix::identity_matrix());
-    Vector *from = new Vector(0.0, 2.5, -5.0, 1);
+    float fMULT = 10;
+    float fWIDTH = 192 * fMULT;
+    float fHEIGHT = 108 * fMULT;
+    Camera *cam = new Camera(qRound(fWIDTH), qRound(fHEIGHT), M_PI / 3, Matrix::identity_matrix());
+    Vector *from = new Vector(0, 3.6, -7.0, 1);
     Vector *to = new Vector(0, 1, 0, 1);
     Vector *up = new Vector(0, 1, 0, 0);
     cam->transformation = Matrix::view_transformation(from, to, up);
@@ -80,16 +79,17 @@ int main(int argc, char *argv[]) {
     world->light = new Light(white, new Vector(-10, 10, -10, 1));
 
     Parser *parser = new Parser();
-    QString sFile = "/home/jparker/Desktop/teapot.obj";
-    Material *mat = new Material(white, 0.1, 0.9, 0.9, 200);
+    QString sFile = "/home/jparker/Desktop/dragon.obj";
+    Material *mat = new Material(Vector::from_rgb(128,128,128), 0.1, 0.9, 0.9, 200);
     QVector<Body*> g = parser->parse_file(sFile, mat);
     for (int i=0; i<g.size(); i++) {
         world->push(g[i]);
     }
 
-    qDebug() << world->objects.size();
+    world->objects[0]->transform(Matrix::translation(0, -1.7, 1.2));
 
-    Plane *plane = new Plane(new Material(new Vector(0.35, 0.35, 0.35, 0), 0.1, 0.9, 0.9, 200));
+    Plane *plane = new Plane(new Material(Vector::from_rgb(34,139,34), 0.1, 0.9, 0.9, 200));
+    plane->transform(Matrix::translation(0, -1.7, 0));
     world->push(plane);
 
     render(cam, world);
@@ -100,6 +100,3 @@ int main(int argc, char *argv[]) {
     qDebug() << ((float)(fWIDTH * fHEIGHT) / (float)(lElapsedTime)) << "px / ms";
     return 0;
 }
-
-
-
